@@ -1,0 +1,8 @@
+{
+  "setupTitle": "Setup your vault",
+  "setMasterPasswordLabel": "Master password",
+  "passwordTooShort": "This password is too short",
+  "masterPasswordRepeatLabel": "Repeat password",
+  "passwordNotMatch": "Passwords don't match",
+  "createVault": "Create Vault"
+}
