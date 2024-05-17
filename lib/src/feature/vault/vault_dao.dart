@@ -1,5 +1,5 @@
-abstract class VaultDAO {
-  Future<void> load();
+abstract class VaultDao {
+  Future<void> tryUnlock(String password);
 
-  Future<void> create(String password);
+  Future<bool> get isMasterPassSet;
 }
