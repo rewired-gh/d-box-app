@@ -4,7 +4,6 @@ import 'package:d_box/src/page/vault_page.dart';
 import 'package:d_box/src/util/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,7 +11,7 @@ Future<void> main() async {
   runApp(MyApp());
 }
 
-class MyApp extends HookWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
@@ -27,23 +26,5 @@ class MyApp extends HookWidget {
           '/vault': (_) => const VaultPage()
         },
         home: const GreetingPage());
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-      ),
-      body: Center(
-        child: Text("dummy"),
-      ),
-    );
   }
 }

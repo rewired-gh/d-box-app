@@ -5,8 +5,7 @@ class ProgressButton extends HookWidget {
   final Widget child;
   final Function(AnimationController)? onPressed;
 
-  const ProgressButton({Key? key, required this.child, this.onPressed})
-      : super(key: key);
+  const ProgressButton({super.key, required this.child, this.onPressed});
 
   Widget _selectChild(AnimationController controller) {
     if (controller.isAnimating) {

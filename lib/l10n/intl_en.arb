@@ -5,6 +5,6 @@
   "masterPasswordRepeatLabel": "Repeat password",
   "passwordNotMatch": "Passwords don't match",
   "createVault": "Create Vault",
-  "vault": "Vault",
+  "vaultTitle": "Vault",
   "operationFailed": "Operation failed"
 }
