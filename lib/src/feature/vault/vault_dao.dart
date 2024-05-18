@@ -1,5 +1,7 @@
 abstract class VaultDao {
-  Future<void> tryUnlock(String password);
+  static const magicSeq = [19, 84];
+
+  Future<bool> tryUnlock(String password);
 
   Future<bool> get isMasterPassSet;
 }

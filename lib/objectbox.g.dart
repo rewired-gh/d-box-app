@@ -15,6 +15,7 @@ import 'package:objectbox/objectbox.dart' as obx;
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
 import 'src/feature/vault/encrypted_item.dart';
+import 'src/feature/vault/vault_meta.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
 
@@ -22,7 +23,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(2, 2811790242535780380),
       name: 'EncryptedItem',
-      lastPropertyId: const obx_int.IdUid(5, 5281970659423513972),
+      lastPropertyId: const obx_int.IdUid(7, 1440981706524082140),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -50,7 +51,36 @@ final _entities = <obx_int.ModelEntity>[
             name: 'isSign',
             type: 1,
             flags: 8,
-            indexId: const obx_int.IdUid(1, 7020919019952261138))
+            indexId: const obx_int.IdUid(1, 7020919019952261138)),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(6, 6390993636789534268),
+            name: 'nonce',
+            type: 27,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(7, 1440981706524082140),
+            name: 'mac',
+            type: 27,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(3, 7985173069716592202),
+      name: 'VaultMeta',
+      lastPropertyId: const obx_int.IdUid(2, 518839861268649420),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 8794863291609998961),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 518839861268649420),
+            name: 'masterNonce',
+            type: 27,
+            flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[])
@@ -91,7 +121,7 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(2, 2811790242535780380),
+      lastEntityId: const obx_int.IdUid(3, 7985173069716592202),
       lastIndexId: const obx_int.IdUid(1, 7020919019952261138),
       lastRelationId: const obx_int.IdUid(0, 0),
       lastSequenceId: const obx_int.IdUid(0, 0),
@@ -119,33 +149,72 @@ obx_int.ModelDefinition getObjectBoxModel() {
         },
         objectToFB: (EncryptedItem object, fb.Builder fbb) {
           final nameOffset = fbb.writeString(object.name);
-          final encryptedContentOffset =
-              fbb.writeListInt64(object.encryptedContent);
-          fbb.startTable(6);
+          final encryptedContentOffset = object.encryptedContent == null
+              ? null
+              : fbb.writeListInt64(object.encryptedContent!);
+          final nonceOffset =
+              object.nonce == null ? null : fbb.writeListInt64(object.nonce!);
+          final macOffset =
+              object.mac == null ? null : fbb.writeListInt64(object.mac!);
+          fbb.startTable(8);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, nameOffset);
           fbb.addOffset(2, encryptedContentOffset);
           fbb.addInt64(3, object.createdDate.millisecondsSinceEpoch);
           fbb.addBool(4, object.isSign);
+          fbb.addOffset(5, nonceOffset);
+          fbb.addOffset(6, macOffset);
           fbb.finish(fbb.endTable());
           return object.id;
         },
         objectFromFB: (obx.Store store, ByteData fbData) {
           final buffer = fb.BufferContext(fbData);
           final rootOffset = buffer.derefObject(0);
-          final idParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
           final nameParam = const fb.StringReader(asciiOptimization: true)
               .vTableGet(buffer, rootOffset, 6, '');
+          final idParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
           final isSignParam =
               const fb.BoolReader().vTableGet(buffer, rootOffset, 12, false);
-          final encryptedContentParam =
-              const fb.ListReader<int>(fb.Int64Reader(), lazy: false)
-                  .vTableGet(buffer, rootOffset, 8, []);
-          final object = EncryptedItem(idParam, nameParam,
-              isSign: isSignParam, encryptedContent: encryptedContentParam)
+          final object = EncryptedItem(
+              name: nameParam, id: idParam, isSign: isSignParam)
+            ..encryptedContent =
+                const fb.ListReader<int>(fb.Int64Reader(), lazy: false)
+                    .vTableGetNullable(buffer, rootOffset, 8)
             ..createdDate = DateTime.fromMillisecondsSinceEpoch(
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0));
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0))
+            ..nonce = const fb.ListReader<int>(fb.Int64Reader(), lazy: false)
+                .vTableGetNullable(buffer, rootOffset, 14)
+            ..mac = const fb.ListReader<int>(fb.Int64Reader(), lazy: false)
+                .vTableGetNullable(buffer, rootOffset, 16);
+
+          return object;
+        }),
+    VaultMeta: obx_int.EntityDefinition<VaultMeta>(
+        model: _entities[1],
+        toOneRelations: (VaultMeta object) => [],
+        toManyRelations: (VaultMeta object) => {},
+        getId: (VaultMeta object) => object.id,
+        setId: (VaultMeta object, int id) {
+          object.id = id;
+        },
+        objectToFB: (VaultMeta object, fb.Builder fbb) {
+          final masterNonceOffset = fbb.writeListInt64(object.masterNonce);
+          fbb.startTable(3);
+          fbb.addInt64(0, object.id);
+          fbb.addOffset(1, masterNonceOffset);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+
+          final object = VaultMeta()
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
+            ..masterNonce =
+                const fb.ListReader<int>(fb.Int64Reader(), lazy: false)
+                    .vTableGet(buffer, rootOffset, 6, []);
 
           return object;
         })
@@ -175,4 +244,23 @@ class EncryptedItem_ {
   /// See [EncryptedItem.isSign].
   static final isSign =
       obx.QueryBooleanProperty<EncryptedItem>(_entities[0].properties[4]);
+
+  /// See [EncryptedItem.nonce].
+  static final nonce =
+      obx.QueryIntegerVectorProperty<EncryptedItem>(_entities[0].properties[5]);
+
+  /// See [EncryptedItem.mac].
+  static final mac =
+      obx.QueryIntegerVectorProperty<EncryptedItem>(_entities[0].properties[6]);
+}
+
+/// [VaultMeta] entity fields to define ObjectBox queries.
+class VaultMeta_ {
+  /// See [VaultMeta.id].
+  static final id =
+      obx.QueryIntegerProperty<VaultMeta>(_entities[1].properties[0]);
+
+  /// See [VaultMeta.masterNonce].
+  static final masterNonce =
+      obx.QueryIntegerVectorProperty<VaultMeta>(_entities[1].properties[1]);
 }

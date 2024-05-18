@@ -11,11 +11,18 @@ class PasswordHash {
     return PasswordHash(password, weakNonce);
   }
 
-  Future<List<int>> generateHash(String password, List<int> nonce) async {
+  List<int>? _hash;
+
+  Future<List<int>> _generateHash() async {
     final algo =
         Argon2id(parallelism: 1, memory: 47104, iterations: 1, hashLength: 32);
     final secretKey =
         await algo.deriveKeyFromPassword(password: password, nonce: nonce);
     return await secretKey.extractBytes();
+  }
+
+  Future<List<int>> get hash async {
+    _hash ??= await _generateHash();
+    return _hash!;
   }
 }

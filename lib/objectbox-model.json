@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "2:2811790242535780380",
-      "lastPropertyId": "5:5281970659423513972",
+      "lastPropertyId": "7:1440981706524082140",
       "name": "EncryptedItem",
       "properties": [
         {
@@ -35,12 +35,41 @@
           "type": 1,
           "flags": 8,
           "indexId": "1:7020919019952261138"
+        },
+        {
+          "id": "6:6390993636789534268",
+          "name": "nonce",
+          "type": 27
+        },
+        {
+          "id": "7:1440981706524082140",
+          "name": "mac",
+          "type": 27
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "3:7985173069716592202",
+      "lastPropertyId": "2:518839861268649420",
+      "name": "VaultMeta",
+      "properties": [
+        {
+          "id": "1:8794863291609998961",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:518839861268649420",
+          "name": "masterNonce",
+          "type": 27
         }
       ],
       "relations": []
     }
   ],
-  "lastEntityId": "2:2811790242535780380",
+  "lastEntityId": "3:7985173069716592202",
   "lastIndexId": "1:7020919019952261138",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",

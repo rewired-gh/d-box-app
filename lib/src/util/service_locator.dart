@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:d_box/objectbox.g.dart';
 import 'package:d_box/src/feature/vault/vault_dao.dart';
 import 'package:d_box/src/feature/vault/vault_dao_object_box_impl.dart';
+import 'package:d_box/src/feature/vault/vault_meta.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,7 +16,7 @@ class ServiceLocator {
   static final instance = ServiceLocator._ctor();
 
   Future<void> init() async {
-    final dir = await getApplicationDocumentsDirectory();
+    final dir = await getApplicationSupportDirectory();
     store = await openStore(directory: p.join(dir.path, 'obx_store'));
   }
 
@@ -34,4 +35,11 @@ class ServiceLocator {
   }
 
   late Store store;
+
+  VaultMetaService? _vaultMetaService;
+
+  VaultMetaService get vaultMetaService {
+    _vaultMetaService ??= VaultMetaService();
+    return _vaultMetaService!;
+  }
 }

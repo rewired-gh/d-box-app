@@ -2,14 +2,15 @@ import 'package:d_box/src/page/setup_page.dart';
 import 'package:d_box/src/util/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ServiceLocator.instance.init();
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends HookWidget {
   const MyApp({super.key});
 
   @override
@@ -19,6 +20,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
+        routes: {'/setup': (_) => const SetupPage()},
         home: FutureBuilder(
           future: ServiceLocator.instance.vaultDao.isMasterPassSet,
           builder: (context, snapshot) {
@@ -27,9 +29,13 @@ class MyApp extends StatelessWidget {
             } else if (snapshot.hasError) {
               return Text(snapshot.error.toString());
             } else {
-              return snapshot.data == false
-                  ? SetupPage()
-                  : const MyHomePage(title: "dummy");
+              if (snapshot.data == false) {
+                WidgetsBinding.instance.addPostFrameCallback((_) =>
+                    Navigator.of(context)
+                        .pushNamedAndRemoveUntil('/setup', (_) => false));
+                return const Scaffold();
+              }
+              return const MyHomePage(title: "dummy");
             }
           },
         ));

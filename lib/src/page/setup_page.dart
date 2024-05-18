@@ -1,3 +1,5 @@
+import 'package:d_box/src/util/service_locator.dart';
+import 'package:d_box/src/widget/progress_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -9,8 +11,9 @@ class SetupPage extends HookWidget {
   Widget build(BuildContext context) {
     final formKey = useRef(GlobalKey<FormState>());
     final l = AppLocalizations.of(context);
-
+    final s = ServiceLocator.instance;
     final masterPassword = useState("");
+    final isSettingUp = useState(false);
 
     return Scaffold(
         appBar: AppBar(
@@ -56,10 +59,20 @@ class SetupPage extends HookWidget {
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                   ),
                   const Spacer(),
-                  ElevatedButton(
-                      onPressed: () {
+                  ProgressButton(
+                      onPressed: (controller) async {
                         if (formKey.value.currentState!.validate()) {
-                          // TODO: Create vault
+                          controller.forward();
+                          if (await s.vaultDao
+                              .tryUnlock(masterPassword.value)) {
+                            await Future.delayed(const Duration(seconds: 3));
+                            if (!context.mounted) {
+                              return;
+                            }
+                            Navigator.of(context).pushReplacementNamed('/');
+                          } else {
+                            // TODO
+                          }
                         }
                       },
                       child: Text(l.createVault))
