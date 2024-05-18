@@ -5,11 +5,9 @@ import 'package:objectbox/objectbox.dart';
 class EncryptedItem {
   @Id()
   int id;
-  String name;
   List<int>? encryptedContent;
   List<int>? nonce;
   List<int>? mac;
-  DateTime createdDate;
   @Index()
   bool isSign;
 
@@ -48,7 +46,6 @@ class EncryptedItem {
     encryptedContent = secretBox.cipherText;
   }
 
-  EncryptedItem({this.name = "", this.id = 0, this.isSign = false})
-      : createdDate = DateTime.now(),
-        algo = AesGcm.with256bits();
+  EncryptedItem({this.id = 0, this.isSign = false})
+      : algo = AesGcm.with256bits();
 }
