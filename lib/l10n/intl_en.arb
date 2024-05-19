@@ -1,10 +1,32 @@
 {
+  "@@locale": "en",
   "setupTitle": "Setup your vault",
-  "setMasterPasswordLabel": "Master password",
+  "masterPasswordLabel": "Master password",
   "passwordTooShort": "This password is too short",
   "masterPasswordRepeatLabel": "Repeat password",
   "passwordNotMatch": "Passwords don't match",
   "createVault": "Create Vault",
   "vaultTitle": "Vault",
-  "operationFailed": "Operation failed"
+  "operationFailed": "Operation failed",
+  "unlockTitle": "Unlock your vault",
+  "failedWrongPassword": "Unlock failed: Incorrect password",
+  "unlock": "Unlock",
+  "createdDate": "Created at: {dateTime}",
+  "@createdDate": {
+    "placeholders": {
+      "dateTime": {
+        "type": "DateTime",
+        "format": "yMMMMd"
+      }
+    }
+  },
+  "addItem": "Add a new item",
+  "newItemName": "New item",
+  "itemNameLabel": "Item name",
+  "fieldCantEmpty": "This field cannot be empty",
+  "decryptedContentLabel": "Decrypted content",
+  "confirmDelete": "Confirm deletion",
+  "actionCantUndoP": "This action cannot be undone.",
+  "confirm": "Confirm",
+  "cancel": "Cancel"
 }

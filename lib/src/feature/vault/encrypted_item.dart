@@ -15,7 +15,7 @@ class EncryptedItem {
   List<int>? _content;
 
   @Transient()
-  final Cipher algo;
+  final Cipher _algo;
 
   Future<List<int>?> getContent(List<int> passwordHash) async {
     if (_content != null ||
@@ -28,7 +28,7 @@ class EncryptedItem {
         SecretBox(encryptedContent!, nonce: nonce!, mac: Mac(mac!));
     try {
       _content =
-          await algo.decrypt(secretBox, secretKey: SecretKey(passwordHash));
+          await _algo.decrypt(secretBox, secretKey: SecretKey(passwordHash));
     } catch (e) {
       if (e is SecretBoxAuthenticationError) {
         return _content;
@@ -40,12 +40,12 @@ class EncryptedItem {
 
   Future<void> setContent(List<int> passwordHash, List<int> content) async {
     final secretBox =
-        await algo.encrypt(content, secretKey: SecretKey(passwordHash));
+        await _algo.encrypt(content, secretKey: SecretKey(passwordHash));
     nonce = secretBox.nonce;
     mac = secretBox.mac.bytes;
     encryptedContent = secretBox.cipherText;
   }
 
   EncryptedItem({this.id = 0, this.isSign = false})
-      : algo = AesGcm.with256bits();
+      : _algo = AesGcm.with256bits();
 }

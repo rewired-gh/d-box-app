@@ -1,3 +1,3 @@
 Future<void> debug_delay() async {
-  return Future.delayed(const Duration(milliseconds: 1500));
+  return Future.delayed(const Duration(milliseconds: 600));
 }

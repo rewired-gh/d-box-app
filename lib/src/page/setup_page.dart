@@ -1,3 +1,4 @@
+import 'package:d_box/src/page/vault_page.dart';
 import 'package:d_box/src/util/debug.dart';
 import 'package:d_box/src/util/service_locator.dart';
 import 'package:d_box/src/widget/heibon_layout.dart';
@@ -8,6 +9,8 @@ import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class SetupPage extends HookWidget {
+  static const route = '/setup';
+
   const SetupPage({super.key});
 
   @override
@@ -15,8 +18,7 @@ class SetupPage extends HookWidget {
     final formKey = useRef(GlobalKey<FormState>());
     final l = AppLocalizations.of(context);
     final s = ServiceLocator.instance;
-    final masterPassword = useState("");
-    final isSettingUp = useState(false);
+    final masterPasswordController = useTextEditingController();
 
     return HeibonLayout(
       title: Text(l.setupTitle),
@@ -28,19 +30,17 @@ class SetupPage extends HookWidget {
               TextFormField(
                 decoration: InputDecoration(
                   icon: const Icon(Icons.key),
-                  labelText: l.setMasterPasswordLabel,
+                  labelText: l.masterPasswordLabel,
                 ),
                 obscureText: true,
-                validator: (String? value) {
+                validator: (value) {
                   if (value == null || value.length < 10) {
                     return l.passwordTooShort;
                   }
                   return null;
                 },
                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                onChanged: (value) {
-                  masterPassword.value = value;
-                },
+                controller: masterPasswordController,
               ),
               const SizedBox(height: 10),
               TextFormField(
@@ -49,8 +49,8 @@ class SetupPage extends HookWidget {
                   labelText: l.masterPasswordRepeatLabel,
                 ),
                 obscureText: true,
-                validator: (String? value) {
-                  if (value != masterPassword.value) {
+                validator: (value) {
+                  if (value != masterPasswordController.text) {
                     return l.passwordNotMatch;
                   }
                   return null;
@@ -62,8 +62,8 @@ class SetupPage extends HookWidget {
                   onPressed: (controller) async {
                     if (formKey.value.currentState!.validate()) {
                       controller.forward();
-                      final ok =
-                          await s.vaultDao.tryUnlock(masterPassword.value);
+                      final ok = await s.vaultDao
+                          .tryUnlock(masterPasswordController.text);
                       if (!context.mounted) {
                         return;
                       }
@@ -74,7 +74,8 @@ class SetupPage extends HookWidget {
                             return;
                           }
                         }
-                        Navigator.of(context).pushReplacementNamed('/vault');
+                        Navigator.of(context)
+                            .pushReplacementNamed(VaultPage.route);
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text(l.operationFailed),

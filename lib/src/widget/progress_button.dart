@@ -12,7 +12,7 @@ class ProgressButton extends HookWidget {
       return Container();
     } else if (controller.isCompleted) {
       return const OverflowBox(
-          maxWidth: 24.0, maxHeight: 24.0, child: CircularProgressIndicator());
+          maxWidth: 23.0, maxHeight: 23.0, child: CircularProgressIndicator());
     }
     return child;
   }
@@ -25,14 +25,10 @@ class ProgressButton extends HookWidget {
     return Center(child: LayoutBuilder(builder: (context, constraints) {
       final height = (constraints.maxHeight != double.infinity)
           ? constraints.maxHeight
-          : 50.0;
+          : 46.0;
       final widthAnimation = Tween<double>(
         begin: constraints.maxWidth,
         end: height,
-      ).animate(CurvedAnimation(parent: controller, curve: Curves.easeInOut));
-      final borderRadiusAnimation = Tween<BorderRadius>(
-        begin: BorderRadius.circular(25.0),
-        end: BorderRadius.circular(height / 2.0),
       ).animate(CurvedAnimation(parent: controller, curve: Curves.easeInOut));
 
       return AnimatedBuilder(
@@ -43,7 +39,7 @@ class ProgressButton extends HookWidget {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
-                        borderRadius: borderRadiusAnimation.value),
+                        borderRadius: BorderRadius.circular(height / 2.0)),
                   ),
                   onPressed: onPressed != null &&
                           !controller.isAnimating &&

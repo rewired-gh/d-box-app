@@ -3,11 +3,15 @@ import 'package:d_box/src/feature/crypt/password_hash.dart';
 import 'package:d_box/src/feature/vault/encrypted_item.dart';
 import 'package:d_box/src/feature/vault/encrypted_item_meta.dart';
 import 'package:d_box/src/feature/vault/vault_dao.dart';
+import 'package:d_box/src/util/debug.dart';
 import 'package:d_box/src/util/service_locator.dart';
 import 'package:flutter/foundation.dart';
 
 class VaultDaoObjectBoxImpl extends VaultDao {
   late final Query<EncryptedItem> _signItemQuery;
+  late final Query<EncryptedItemMeta> _allMetasQuery;
+  late final Query<EncryptedItem> _itemQuery;
+  late final Query<EncryptedItemMeta> _metaQuery;
 
   final Box<EncryptedItem> _box;
   final Box<EncryptedItemMeta> _metaBox;
@@ -16,22 +20,29 @@ class VaultDaoObjectBoxImpl extends VaultDao {
       : _box = ServiceLocator.instance.store.box<EncryptedItem>(),
         _metaBox = ServiceLocator.instance.store.box<EncryptedItemMeta>() {
     _signItemQuery = _box.query(EncryptedItem_.isSign.equals(true)).build();
+    _allMetasQuery = _metaBox
+        .query()
+        .order(
+          EncryptedItemMeta_.createdDate,
+          flags: Order.descending,
+        )
+        .build();
+    _itemQuery = _box.query(EncryptedItem_.id.equals(0)).build();
+    _metaQuery = _metaBox.query(EncryptedItemMeta_.id.equals(0)).build();
   }
 
   Future<EncryptedItem?> get _signItem => _signItemQuery.findFirstAsync();
-
-  List<int>? _cachedMasterHash;
 
   @override
   Future<bool> tryUnlock(String password) async {
     final meta = await ServiceLocator.instance.vaultMetaService.meta;
     final sign = await _signItem;
     final hash = await PasswordHash(password, meta.masterNonce).hash;
-    _cachedMasterHash = hash;
+    cachedMasterHash = hash;
 
     if (sign == null) {
       final newSign = EncryptedItem(isSign: true);
-      newSign.setContent(hash, VaultDao.magicSeq);
+      await newSign.setContent(hash, VaultDao.magicSeq);
       await _box.putAsync(newSign);
       return true;
     }
@@ -41,6 +52,42 @@ class VaultDaoObjectBoxImpl extends VaultDao {
       return false;
     }
     return listEquals(auth, VaultDao.magicSeq);
+  }
+
+  @override
+  Future<List<EncryptedItemMeta>> get allItemMetas =>
+      _allMetasQuery.findAsync();
+
+  @override
+  Future<EncryptedItemMeta> createNewItem(name) async {
+    final newItem = await _box.putAndGetAsync(EncryptedItem());
+    final newMeta = await _metaBox.putAndGetAsync(
+        EncryptedItemMeta(itemId: newItem.id, name: name ?? ""));
+    if (kDebugMode) {
+      await debug_delay();
+    }
+    return newMeta;
+  }
+
+  @override
+  Future<EncryptedItem> getItemById(int id) async {
+    _itemQuery.param(EncryptedItem_.id).value = id;
+    final item = await _itemQuery.findFirstAsync();
+    if (item == null) {
+      throw Exception(); // TODO
+    }
+    return item;
+  }
+
+  @override
+  Future<void> removeItemById(int metaId) async {
+    _metaQuery.param(EncryptedItemMeta_.id).value = metaId;
+    final itemId = _metaQuery.property(EncryptedItemMeta_.itemId).find().first;
+    await _box.removeAsync(itemId);
+    await _metaBox.removeAsync(metaId);
+    if (kDebugMode) {
+      await debug_delay();
+    }
   }
 
   @override
