@@ -4,6 +4,8 @@
     "colorTheme",
     "resetMasterPassword",
     "about",
-    "copyrightInfo"
+    "copyrightInfo",
+    "dataExportImport",
+    "autoDetect"
   ]
 }

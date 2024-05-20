@@ -6,6 +6,7 @@ import 'package:d_box/src/widget/heibon_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class VaultPage extends HookConsumerWidget {
@@ -28,8 +29,16 @@ class VaultPage extends HookConsumerWidget {
         crossAxisAlignment: WrapCrossAlignment.center,
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 3.0),
-            child: Text(l.vaultTitle),
+            padding: const EdgeInsets.only(left: 4.0),
+            child: Text(
+              l.vaultTitle,
+              style: GoogleFonts.ibmPlexSans(
+                textStyle: const TextStyle(
+                  fontWeight: FontWeight.w300,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ),
           ),
           SizedBox(
             height: 20,
@@ -56,8 +65,13 @@ class VaultPage extends HookConsumerWidget {
           tooltip: l.addItem,
           onPressed: () async {
             isBusy.value = true;
-            await itemMetaListNotifier.createNewItem(l.newItemName);
+            final meta =
+                await itemMetaListNotifier.createNewItem(l.newItemName);
             isBusy.value = false;
+            Navigator.of(context).pushNamed(
+              ItemInspectPage.route,
+              arguments: ItemInspectPageArgs(meta),
+            );
           },
         ),
       ],

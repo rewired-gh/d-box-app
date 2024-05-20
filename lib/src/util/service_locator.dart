@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:d_box/objectbox.g.dart';
+import 'package:d_box/src/feature/settings/settings.dart';
 import 'package:d_box/src/feature/vault/vault_dao.dart';
 import 'package:d_box/src/feature/vault/vault_dao_object_box_impl.dart';
 import 'package:d_box/src/feature/vault/vault_meta.dart';
@@ -45,5 +46,12 @@ class ServiceLocator {
   VaultMetaService get vaultMetaService {
     _vaultMetaService ??= VaultMetaService();
     return _vaultMetaService!;
+  }
+
+  SettingsService? _settingsService;
+
+  SettingsService get settingsService {
+    _settingsService ??= SettingsService();
+    return _settingsService!;
   }
 }

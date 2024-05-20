@@ -12,11 +12,12 @@ class ItemMetaList extends _$ItemMetaList {
     return await ServiceLocator.instance.vaultDao.allItemMetas;
   }
 
-  Future<void> createNewItem(String name) async {
+  Future<EncryptedItemMeta> createNewItem(String name) async {
     final s = ServiceLocator.instance;
-    await s.vaultDao.createNewItem(name);
+    final meta = await s.vaultDao.createNewItem(name);
     ref.invalidateSelf();
     await future;
+    return meta;
   }
 
   Future<void> removeItemById(int metaId) async {

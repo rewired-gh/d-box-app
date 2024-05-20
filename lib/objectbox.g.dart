@@ -14,6 +14,7 @@ import 'package:objectbox/internal.dart'
 import 'package:objectbox/objectbox.dart' as obx;
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
+import 'src/feature/settings/settings.dart';
 import 'src/feature/vault/encrypted_item.dart';
 import 'src/feature/vault/encrypted_item_meta.dart';
 import 'src/feature/vault/vault_meta.dart';
@@ -109,6 +110,36 @@ final _entities = <obx_int.ModelEntity>[
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(7, 8778369122718267783),
+      name: 'Settings',
+      lastPropertyId: const obx_int.IdUid(4, 5205417004198208569),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 5939039926573377667),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 2654857890752841778),
+            name: 'dummy',
+            type: 1,
+            flags: 40,
+            indexId: const obx_int.IdUid(5, 7829220152330982644)),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 5835455665605891455),
+            name: 'languageCode',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(4, 5205417004198208569),
+            name: 'regionCode',
+            type: 9,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[])
 ];
 
@@ -147,11 +178,15 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(4, 261786158343403634),
-      lastIndexId: const obx_int.IdUid(2, 3857211504309017756),
+      lastEntityId: const obx_int.IdUid(7, 8778369122718267783),
+      lastIndexId: const obx_int.IdUid(5, 7829220152330982644),
       lastRelationId: const obx_int.IdUid(0, 0),
       lastSequenceId: const obx_int.IdUid(0, 0),
-      retiredEntityUids: const [8976722826320732793],
+      retiredEntityUids: const [
+        8976722826320732793,
+        4588634890854115557,
+        6950302300419816828
+      ],
       retiredIndexUids: const [],
       retiredPropertyUids: const [
         1205461486277506787,
@@ -159,7 +194,14 @@ obx_int.ModelDefinition getObjectBoxModel() {
         4140598850104626552,
         4085211508820151623,
         2185063763467598746,
-        2952770497306688716
+        2952770497306688716,
+        7313188264748893939,
+        6435064475561415452,
+        2354525084317388253,
+        6457978573625324725,
+        3402087818918753114,
+        2477705914021042364,
+        6998094141879085562
       ],
       retiredRelationUids: const [],
       modelVersion: 5,
@@ -274,6 +316,45 @@ obx_int.ModelDefinition getObjectBoxModel() {
                 const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0));
 
           return object;
+        }),
+    Settings: obx_int.EntityDefinition<Settings>(
+        model: _entities[3],
+        toOneRelations: (Settings object) => [],
+        toManyRelations: (Settings object) => {},
+        getId: (Settings object) => object.id,
+        setId: (Settings object, int id) {
+          object.id = id;
+        },
+        objectToFB: (Settings object, fb.Builder fbb) {
+          final languageCodeOffset = object.languageCode == null
+              ? null
+              : fbb.writeString(object.languageCode!);
+          final regionCodeOffset = object.regionCode == null
+              ? null
+              : fbb.writeString(object.regionCode!);
+          fbb.startTable(5);
+          fbb.addInt64(0, object.id);
+          fbb.addBool(1, object.dummy);
+          fbb.addOffset(2, languageCodeOffset);
+          fbb.addOffset(3, regionCodeOffset);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final languageCodeParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 8);
+          final regionCodeParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 10);
+          final object = Settings(
+              languageCode: languageCodeParam, regionCode: regionCodeParam)
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
+            ..dummy =
+                const fb.BoolReader().vTableGet(buffer, rootOffset, 6, false);
+
+          return object;
         })
   };
 
@@ -335,4 +416,23 @@ class EncryptedItemMeta_ {
   /// See [EncryptedItemMeta.createdDate].
   static final createdDate =
       obx.QueryDateProperty<EncryptedItemMeta>(_entities[2].properties[3]);
+}
+
+/// [Settings] entity fields to define ObjectBox queries.
+class Settings_ {
+  /// See [Settings.id].
+  static final id =
+      obx.QueryIntegerProperty<Settings>(_entities[3].properties[0]);
+
+  /// See [Settings.dummy].
+  static final dummy =
+      obx.QueryBooleanProperty<Settings>(_entities[3].properties[1]);
+
+  /// See [Settings.languageCode].
+  static final languageCode =
+      obx.QueryStringProperty<Settings>(_entities[3].properties[2]);
+
+  /// See [Settings.regionCode].
+  static final regionCode =
+      obx.QueryStringProperty<Settings>(_entities[3].properties[3]);
 }

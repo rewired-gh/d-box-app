@@ -39,12 +39,14 @@
   "colorTheme": "Color theme",
   "resetMasterPassword": "Reset master password",
   "about": "About D-Box",
-  "copyrightInfo": "© {rightYear} Haojun Li All rights reserved.",
+  "copyrightInfo": "© {rightYear} Haojun Li All rights reserved.\nWebsite: https://rewired.moe",
   "@rightYear": {
     "placeholders": {
       "dateTime": {
         "type": "String"
       }
     }
-  }
+  },
+  "dataExportImport": "Export and import data",
+  "autoDetect": "Auto detect"
 }

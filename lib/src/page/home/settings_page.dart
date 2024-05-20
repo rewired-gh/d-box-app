@@ -1,3 +1,4 @@
+import 'package:d_box/src/page/setting/language_page.dart';
 import 'package:d_box/src/widget/heibon_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
@@ -18,6 +19,9 @@ class SettingsPage extends HookWidget {
           SettingTile(
             icon: const Icon(Icons.language),
             title: Text(l.languageRegion),
+            onTap: () {
+              Navigator.of(context).pushNamed(LanguagePage.route);
+            },
           ),
           SettingTile(
             icon: const Icon(Icons.color_lens_outlined),
@@ -26,6 +30,10 @@ class SettingsPage extends HookWidget {
           SettingTile(
             icon: const Icon(Icons.password),
             title: Text(l.resetMasterPassword),
+          ),
+          SettingTile(
+            icon: const Icon(Icons.swap_horiz),
+            title: Text(l.dataExportImport),
           ),
           SettingTile(
             icon: const Icon(Icons.info_outline),
