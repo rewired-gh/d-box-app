@@ -15,5 +15,7 @@ abstract class VaultDao {
 
   Future<void> removeItemById(int metaId);
 
+  Future<void> setItem(EncryptedItemMeta meta, EncryptedItem item);
+
   Future<bool> get isMasterPassSet;
 }

@@ -3,6 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  build_info_windows
   objectbox_flutter_libs
 )
 

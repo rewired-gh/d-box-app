@@ -3,6 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  build_info_linux
   objectbox_flutter_libs
 )
 

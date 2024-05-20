@@ -1,0 +1,38 @@
+{
+  "@@locale": "zh",
+  "setupTitle": "配置保险箱",
+  "masterPasswordLabel": "主密码",
+  "passwordTooShort": "密码长度太短",
+  "masterPasswordRepeatLabel": "重复输入主密码",
+  "passwordNotMatch": "两次输入的密码不匹配",
+  "createVault": "创建保险箱",
+  "vaultTitle": "D-Box",
+  "operationFailed": "操作失败",
+  "unlockTitle": "解锁保险箱",
+  "failedWrongPassword": "解锁失败：密码错误",
+  "unlock": "解锁",
+  "createdDate": "创建时间：{dateTime}",
+  "@createdDate": {
+    "placeholders": {
+      "dateTime": {
+        "type": "DateTime",
+        "format": "yMd"
+      }
+    }
+  },
+  "addItem": "创建项目",
+  "newItemName": "新项目",
+  "itemNameLabel": "项目名称",
+  "fieldCantEmpty": "此字段不能为空",
+  "decryptedContentLabel": "解密后的内容",
+  "confirmDelete": "确认删除",
+  "actionCantUndoP": "此操作无法撤销。",
+  "confirm": "确认",
+  "cancel": "取消",
+  "lockVault": "锁定保险箱",
+  "save": "保存",
+  "unsaveReminder": "当前内容未保存",
+  "contentSaved": "内容已保存",
+  "home": "首页",
+  "settings": "设置"
+}

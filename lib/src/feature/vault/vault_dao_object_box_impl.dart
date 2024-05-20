@@ -40,6 +40,10 @@ class VaultDaoObjectBoxImpl extends VaultDao {
     final hash = await PasswordHash(password, meta.masterNonce).hash;
     cachedMasterHash = hash;
 
+    if (kDebugMode) {
+      await debug_delay();
+    }
+
     if (sign == null) {
       final newSign = EncryptedItem(isSign: true);
       await newSign.setContent(hash, VaultDao.magicSeq);
@@ -76,6 +80,9 @@ class VaultDaoObjectBoxImpl extends VaultDao {
     if (item == null) {
       throw Exception(); // TODO
     }
+    if (kDebugMode) {
+      await debug_delay();
+    }
     return item;
   }
 
@@ -85,6 +92,15 @@ class VaultDaoObjectBoxImpl extends VaultDao {
     final itemId = _metaQuery.property(EncryptedItemMeta_.itemId).find().first;
     await _box.removeAsync(itemId);
     await _metaBox.removeAsync(metaId);
+    if (kDebugMode) {
+      await debug_delay();
+    }
+  }
+
+  @override
+  Future<void> setItem(EncryptedItemMeta meta, EncryptedItem item) async {
+    await _metaBox.putAsync(meta);
+    await _box.putAsync(item);
     if (kDebugMode) {
       await debug_delay();
     }

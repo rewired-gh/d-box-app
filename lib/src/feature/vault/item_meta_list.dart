@@ -1,3 +1,4 @@
+import 'package:d_box/src/feature/vault/encrypted_item.dart';
 import 'package:d_box/src/feature/vault/encrypted_item_meta.dart';
 import 'package:d_box/src/util/service_locator.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -21,6 +22,13 @@ class ItemMetaList extends _$ItemMetaList {
   Future<void> removeItemById(int metaId) async {
     final s = ServiceLocator.instance;
     await s.vaultDao.removeItemById(metaId);
+    ref.invalidateSelf();
+    await future;
+  }
+
+  Future<void> setItem(EncryptedItemMeta meta, EncryptedItem item) async {
+    final s = ServiceLocator.instance;
+    await s.vaultDao.setItem(meta, item);
     ref.invalidateSelf();
     await future;
   }

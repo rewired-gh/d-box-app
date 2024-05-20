@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class HeibonLayout extends StatelessWidget {
   final Widget title;
   final Widget body;
+  final Widget? floatingActionButton;
   final List<Widget>? actions;
   final bool isBleeding;
 
@@ -10,6 +11,7 @@ class HeibonLayout extends StatelessWidget {
       {super.key,
       required this.title,
       required this.body,
+      this.floatingActionButton,
       this.actions,
       this.isBleeding = false});
 
@@ -20,11 +22,13 @@ class HeibonLayout extends StatelessWidget {
         title: title,
         actions: actions
             ?.map((w) => Padding(
-                  padding: const EdgeInsets.only(right: 5),
+                  padding: const EdgeInsets.only(right: 10),
                   child: w,
                 ))
             .toList(growable: false),
       ),
+      floatingActionButton: floatingActionButton,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: isBleeding
           ? body
           : Padding(

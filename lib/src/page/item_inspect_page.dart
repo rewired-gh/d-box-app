@@ -41,7 +41,6 @@ class ItemInspectPage extends HookConsumerWidget {
     final nameController = useTextEditingController(text: args.meta.name);
     final name = useState(nameController.text);
     final contentController = useTextEditingController();
-    final isDeleting = useState(false);
 
     final resolvedPair =
         useMemoized(() => _resolveItemDirectly(s.vaultDao, args.meta.itemId));
@@ -51,6 +50,33 @@ class ItemInspectPage extends HookConsumerWidget {
 
     return HeibonLayout(
       title: Text(name.value),
+      floatingActionButton: FloatingActionButton(
+        onPressed: resolvedPairSnapshot.data != null
+            ? () async {
+                if (!formKey.value.currentState!.validate()) {
+                  return;
+                }
+                final (item, content) = resolvedPairSnapshot.data!;
+                await item.setContent(
+                  s.vaultDao.cachedMasterHash!,
+                  utf8.encode(contentController.text),
+                );
+                args.meta.name = nameController.text;
+                await itemMetaListNotifier.setItem(args.meta, item);
+                if (!context.mounted) {
+                  return;
+                }
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(l.contentSaved),
+                    showCloseIcon: true,
+                  ),
+                );
+              }
+            : null,
+        tooltip: l.save,
+        child: const Icon(Icons.save_outlined),
+      ),
       actions: [
         IconButton(
           icon: const Icon(Icons.delete_outline),
@@ -86,36 +112,15 @@ class ItemInspectPage extends HookConsumerWidget {
       body: Form(
         key: formKey.value,
         child: SingleChildScrollView(
-          child: Wrap(
-            runSpacing: 5,
-            children: [
-              TextFormField(
-                decoration: InputDecoration(
-                  icon: const Icon(Icons.bookmark_outline),
-                  labelText: l.itemNameLabel,
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return l.fieldCantEmpty;
-                  }
-                  return null;
-                },
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                controller: nameController,
-                onChanged: (value) {
-                  name.value = value;
-                },
-              ),
-              autoWaitBuilderRoutine<(EncryptedItem, List<int>?)?>(
-                  (context, snapshot) {
-                final (item, content) = snapshot.data!;
-                if (content != null) {
-                  contentController.text = utf8.decode(content);
-                }
-                return TextFormField(
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 80.0),
+            child: Wrap(
+              runSpacing: 10,
+              children: [
+                TextFormField(
                   decoration: InputDecoration(
-                    icon: const Icon(Icons.article_outlined),
-                    labelText: l.decryptedContentLabel,
+                    icon: const Icon(Icons.bookmark_outline),
+                    labelText: l.itemNameLabel,
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -124,10 +129,36 @@ class ItemInspectPage extends HookConsumerWidget {
                     return null;
                   },
                   autovalidateMode: AutovalidateMode.onUserInteraction,
-                  controller: contentController,
-                );
-              })(context, resolvedPairSnapshot),
-            ],
+                  controller: nameController,
+                  onChanged: (value) {
+                    name.value = value;
+                  },
+                ),
+                autoWaitBuilderRoutine<(EncryptedItem, List<int>?)?>(
+                    (context, snapshot) {
+                  final (item, content) = snapshot.data!;
+                  if (content != null) {
+                    contentController.text = utf8.decode(content);
+                  }
+                  return TextFormField(
+                    decoration: InputDecoration(
+                      icon: const Icon(Icons.article_outlined),
+                      labelText: l.decryptedContentLabel,
+                    ),
+                    minLines: 1,
+                    maxLines: 256,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return l.fieldCantEmpty;
+                      }
+                      return null;
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    controller: contentController,
+                  );
+                })(context, resolvedPairSnapshot),
+              ],
+            ),
           ),
         ),
       ),

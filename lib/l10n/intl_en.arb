@@ -6,7 +6,7 @@
   "masterPasswordRepeatLabel": "Repeat password",
   "passwordNotMatch": "Passwords don't match",
   "createVault": "Create Vault",
-  "vaultTitle": "Vault",
+  "vaultTitle": "D-Box",
   "operationFailed": "Operation failed",
   "unlockTitle": "Unlock your vault",
   "failedWrongPassword": "Unlock failed: Incorrect password",
@@ -28,5 +28,23 @@
   "confirmDelete": "Confirm deletion",
   "actionCantUndoP": "This action cannot be undone.",
   "confirm": "Confirm",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "lockVault": "Lock the vault",
+  "save": "Save",
+  "unsaveReminder": "Current content is unsaved",
+  "contentSaved": "Content saved",
+  "home": "Home",
+  "settings": "Settings",
+  "languageRegion": "Language and region",
+  "colorTheme": "Color theme",
+  "resetMasterPassword": "Reset master password",
+  "about": "About D-Box",
+  "copyrightInfo": "© {rightYear} Haojun Li All rights reserved.",
+  "@rightYear": {
+    "placeholders": {
+      "dateTime": {
+        "type": "String"
+      }
+    }
+  }
 }

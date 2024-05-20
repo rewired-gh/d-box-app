@@ -1,9 +1,7 @@
-import 'package:d_box/src/page/vault_page.dart';
-import 'package:d_box/src/util/debug.dart';
+import 'package:d_box/src/page/home/vault_page.dart';
 import 'package:d_box/src/util/service_locator.dart';
 import 'package:d_box/src/widget/heibon_layout.dart';
 import 'package:d_box/src/widget/progress_button.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -68,12 +66,6 @@ class SetupPage extends HookWidget {
                         return;
                       }
                       if (ok) {
-                        if (kDebugMode) {
-                          await debug_delay();
-                          if (!context.mounted) {
-                            return;
-                          }
-                        }
                         Navigator.of(context)
                             .pushReplacementNamed(VaultPage.route);
                       } else {

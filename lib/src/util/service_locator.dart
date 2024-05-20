@@ -34,6 +34,10 @@ class ServiceLocator {
     return _vaultDao!;
   }
 
+  void resetVaultDao() {
+    _vaultDao = null;
+  }
+
   late Store store;
 
   VaultMetaService? _vaultMetaService;

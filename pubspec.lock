@@ -73,6 +73,70 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
+  build_info:
+    dependency: "direct main"
+    description:
+      name: build_info
+      sha256: "5e6be3a4eb22e95e8da7c185c0097f0bba764352b2fac82b903be345ab399aeb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
+  build_info_android:
+    dependency: transitive
+    description:
+      name: build_info_android
+      sha256: "5263600bd1449d73c2a17f7228290ec7191847305b520915e95e0ccbf876e4ad"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
+  build_info_ios:
+    dependency: transitive
+    description:
+      name: build_info_ios
+      sha256: "00d6cb3028539ca55460006668a6f3dd70179703a22150d6b6e0fbc4b836161f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
+  build_info_linux:
+    dependency: transitive
+    description:
+      name: build_info_linux
+      sha256: "41d9e186b1bd480cd6c03f7cbff4fa8476128dfe9d59eef52db9c10841971f61"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
+  build_info_macos:
+    dependency: transitive
+    description:
+      name: build_info_macos
+      sha256: "105a0ab75d0c7e7457ce8702b1f172476bbc0faf54764267fab879798bdb1428"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
+  build_info_platform_interface:
+    dependency: transitive
+    description:
+      name: build_info_platform_interface
+      sha256: fb9ad7dd66c84f9a1cca6d2afbec1a667760daecbb7309dd4ade1e5a9ce705b9
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
+  build_info_web:
+    dependency: transitive
+    description:
+      name: build_info_web
+      sha256: df949a0cb54279ab7dfed24492d4cf2834c2333671cfb4ed9fbfda4b7d65cd5b
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
+  build_info_windows:
+    dependency: transitive
+    description:
+      name: build_info_windows
+      sha256: "45b3d55070131df825e4a8db40f544371099c2eed318fb9ee4c0d847bf91ecd3"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
   build_resolvers:
     dependency: transitive
     description:

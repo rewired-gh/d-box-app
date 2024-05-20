@@ -6,7 +6,7 @@ part of 'item_meta_list.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$itemMetaListHash() => r'3ee86be6ff00aaa2960dccf3dab9c8f8a9cb2f7e';
+String _$itemMetaListHash() => r'3f1ec31e7c01f7537172556f12e2977cec6b8cb3';
 
 /// See also [ItemMetaList].
 @ProviderFor(ItemMetaList)
