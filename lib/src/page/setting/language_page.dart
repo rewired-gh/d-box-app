@@ -1,4 +1,5 @@
 import 'package:d_box/src/feature/settings/app_locale.dart';
+import 'package:d_box/src/util/service_locator.dart';
 import 'package:d_box/src/widget/heibon_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
@@ -16,9 +17,12 @@ class LanguagePage extends HookConsumerWidget {
     const locales = [null, ...AppLocalizations.supportedLocales];
 
     final l = AppLocalizations.of(context);
-    final ValueNotifier<Locale?> selectedLocale = useState(null);
+    final s = ServiceLocator.instance;
 
     final appLocaleNotifier = ref.read(appLocaleProvider.notifier);
+    final appLocale = ref.watch(appLocaleProvider);
+
+    final ValueNotifier<Locale?> selectedLocale = useState(appLocale);
 
     return HeibonLayout(
       isBleeding: true,

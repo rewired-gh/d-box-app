@@ -10,6 +10,9 @@ gen:
 	flutter pub get
 
 clean_data:
-	rm -r '/Users/lihaojun/Library/Application Support/com.example.client'
+	rm -r '/Users/lihaojun/Library/Application Support/moe.rewired.dbox'
 
-.PHONY: gen
+icons:
+	flutter pub run flutter_launcher_icons
+
+.PHONY: dev gen_watch gen clean_data icons

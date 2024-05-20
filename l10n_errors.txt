@@ -5,6 +5,7 @@
     "resetMasterPassword",
     "about",
     "copyrightInfo",
+    "versionInfo",
     "dataExportImport",
     "autoDetect"
   ]

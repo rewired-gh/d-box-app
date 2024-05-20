@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:d_box/src/feature/settings/app_locale.dart';
 import 'package:d_box/src/page/greeting_page.dart';
 import 'package:d_box/src/page/home_page.dart';
@@ -27,23 +28,37 @@ class MyApp extends ConsumerWidget {
   Widget build(context, ref) {
     final appLocale = ref.watch(appLocaleProvider);
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'D-Box',
-      theme: ThemeData(),
-      locale: appLocale,
-      localizationsDelegates: const [
-        ...AppLocalizations.localizationsDelegates,
-        LocaleNamesLocalizationsDelegate(),
-      ],
-      supportedLocales: AppLocalizations.supportedLocales,
-      routes: {
-        GreetingPage.route: (_) => const GreetingPage(),
-        SetupPage.route: (_) => const SetupPage(),
-        HomePage.route: (_) => const HomePage(),
-        ItemInspectPage.route: (_) => const ItemInspectPage(),
-        LanguagePage.route: (_) => const LanguagePage(),
-      },
+    return AdaptiveTheme(
+      light: ThemeData(
+        useMaterial3: true,
+        colorSchemeSeed: Colors.amber,
+        brightness: Brightness.light,
+      ),
+      dark: ThemeData(
+        useMaterial3: true,
+        colorSchemeSeed: Colors.amber,
+        brightness: Brightness.dark,
+      ),
+      initial: AdaptiveThemeMode.system,
+      builder: (theme, darkTheme) => MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'D-Box',
+        theme: theme,
+        darkTheme: darkTheme,
+        locale: appLocale,
+        localizationsDelegates: const [
+          ...AppLocalizations.localizationsDelegates,
+          LocaleNamesLocalizationsDelegate(),
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
+        routes: {
+          GreetingPage.route: (_) => const GreetingPage(),
+          SetupPage.route: (_) => const SetupPage(),
+          HomePage.route: (_) => const HomePage(),
+          ItemInspectPage.route: (_) => const ItemInspectPage(),
+          LanguagePage.route: (_) => const LanguagePage(),
+        },
+      ),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:d_box/src/page/setting/language_page.dart';
+import 'package:d_box/src/util/service_locator.dart';
 import 'package:d_box/src/widget/heibon_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
@@ -10,6 +11,7 @@ class SettingsPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
+    final s = ServiceLocator.instance;
 
     return HeibonLayout(
       isBleeding: true,
@@ -38,13 +40,27 @@ class SettingsPage extends HookWidget {
           SettingTile(
             icon: const Icon(Icons.info_outline),
             title: Text(l.about),
-            subTitle: Text(
-              l.copyrightInfo('2024'),
-              style: const TextStyle(
-                fontFamily: "", // TODO
-                fontWeight: FontWeight.w300,
-                fontSize: 12.0,
-              ),
+            subTitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l.copyrightInfo('2024'),
+                  style: const TextStyle(
+                    fontFamily: "", // TODO
+                    fontWeight: FontWeight.w300,
+                    fontSize: 10.0,
+                  ),
+                ),
+                Text(
+                  l.versionInfo(
+                      '${s.packageInfo.version}#${s.packageInfo.buildNumber}'),
+                  style: const TextStyle(
+                    fontFamily: "", // TODO
+                    fontWeight: FontWeight.w300,
+                    fontSize: 10.0,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
