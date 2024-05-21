@@ -7,13 +7,14 @@ class HeibonLayout extends StatelessWidget {
   final List<Widget>? actions;
   final bool isBleeding;
 
-  const HeibonLayout(
-      {super.key,
-      required this.title,
-      required this.body,
-      this.floatingActionButton,
-      this.actions,
-      this.isBleeding = false});
+  const HeibonLayout({
+    super.key,
+    required this.title,
+    required this.body,
+    this.floatingActionButton,
+    this.actions,
+    this.isBleeding = false,
+  });
 
   @override
   Widget build(BuildContext context) {

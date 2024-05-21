@@ -1,3 +1,3 @@
-Future<void> debug_delay() async {
+Future<void> kDebugDelay() async {
   return Future.delayed(const Duration(milliseconds: 600));
 }

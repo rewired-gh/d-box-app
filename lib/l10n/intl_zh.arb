@@ -2,7 +2,7 @@
   "@@locale": "zh",
   "setupTitle": "配置保险箱",
   "masterPasswordLabel": "主密码",
-  "passwordTooShort": "密码长度太短",
+  "passwordTooShort": "密码长度太短（少于 12 个字符）",
   "masterPasswordRepeatLabel": "重复输入主密码",
   "passwordNotMatch": "两次输入的密码不匹配",
   "createVault": "创建保险箱",

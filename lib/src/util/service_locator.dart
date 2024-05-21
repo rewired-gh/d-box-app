@@ -37,7 +37,7 @@ class ServiceLocator {
     return _vaultDao!;
   }
 
-  void resetVaultDao() {
+  void unloadVaultDao() {
     _vaultDao = null;
   }
 

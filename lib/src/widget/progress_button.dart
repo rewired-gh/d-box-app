@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:d_box/objectbox.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -22,35 +25,46 @@ class ProgressButton extends HookWidget {
     final controller =
         useAnimationController(duration: const Duration(milliseconds: 300));
 
-    return Center(child: LayoutBuilder(builder: (context, constraints) {
-      final height = (constraints.maxHeight != double.infinity)
-          ? constraints.maxHeight
-          : 46.0;
-      final widthAnimation = Tween<double>(
-        begin: constraints.maxWidth,
-        end: height,
-      ).animate(CurvedAnimation(parent: controller, curve: Curves.easeInOut));
+    return Center(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final height = (constraints.maxHeight != double.infinity)
+              ? constraints.maxHeight
+              : 46.0;
+          final widthAnimation = Tween<double>(
+            begin: constraints.maxWidth,
+            end: height,
+          ).animate(
+              CurvedAnimation(parent: controller, curve: Curves.easeInOut));
 
-      return AnimatedBuilder(
-          animation: controller,
-          builder: (context, child) => SizedBox(
-                height: height,
-                width: widthAnimation.value,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(height / 2.0)),
+          return AnimatedBuilder(
+            animation: controller,
+            builder: (context, child) => SizedBox(
+              height: height,
+              width: widthAnimation.value,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(height / 2.0),
                   ),
-                  onPressed: onPressed != null &&
-                          !controller.isAnimating &&
-                          !controller.isCompleted
-                      ? () {
-                          onPressed!(controller);
-                        }
-                      : null,
-                  child: _selectChild(controller),
+                  textStyle: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-              ));
-    }));
+                onPressed: onPressed != null &&
+                        !controller.isAnimating &&
+                        !controller.isCompleted
+                    ? () {
+                        onPressed!(controller);
+                      }
+                    : null,
+                child: _selectChild(controller),
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 }

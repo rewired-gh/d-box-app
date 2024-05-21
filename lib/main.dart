@@ -4,6 +4,7 @@ import 'package:d_box/src/page/greeting_page.dart';
 import 'package:d_box/src/page/home_page.dart';
 import 'package:d_box/src/page/item_inspect_page.dart';
 import 'package:d_box/src/page/setting/language_page.dart';
+import 'package:d_box/src/page/setting/reset_password_page.dart';
 import 'package:d_box/src/page/setup_page.dart';
 import 'package:d_box/src/util/service_locator.dart';
 import 'package:flutter/material.dart';
@@ -24,21 +25,19 @@ Future<void> main() async {
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
+  ThemeData getThemeData(Brightness brightness) => ThemeData(
+        useMaterial3: true,
+        colorSchemeSeed: Colors.amber,
+        brightness: brightness,
+      );
+
   @override
   Widget build(context, ref) {
     final appLocale = ref.watch(appLocaleProvider);
 
     return AdaptiveTheme(
-      light: ThemeData(
-        useMaterial3: true,
-        colorSchemeSeed: Colors.amber,
-        brightness: Brightness.light,
-      ),
-      dark: ThemeData(
-        useMaterial3: true,
-        colorSchemeSeed: Colors.amber,
-        brightness: Brightness.dark,
-      ),
+      light: getThemeData(Brightness.light),
+      dark: getThemeData(Brightness.dark),
       initial: AdaptiveThemeMode.system,
       builder: (theme, darkTheme) => MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -57,6 +56,7 @@ class MyApp extends ConsumerWidget {
           HomePage.route: (_) => const HomePage(),
           ItemInspectPage.route: (_) => const ItemInspectPage(),
           LanguagePage.route: (_) => const LanguagePage(),
+          ResetPasswordPage.route: (_) => const ResetPasswordPage(),
         },
       ),
     );

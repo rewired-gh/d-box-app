@@ -1,6 +1,9 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:d_box/src/page/setting/language_page.dart';
+import 'package:d_box/src/page/setting/reset_password_page.dart';
 import 'package:d_box/src/util/service_locator.dart';
 import 'package:d_box/src/widget/heibon_layout.dart';
+import 'package:d_box/src/widget/small_choice_chip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -28,10 +31,47 @@ class SettingsPage extends HookWidget {
           SettingTile(
             icon: const Icon(Icons.color_lens_outlined),
             title: Text(l.colorTheme),
+            subTitle: Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: ValueListenableBuilder(
+                valueListenable: AdaptiveTheme.of(context).modeChangeNotifier,
+                builder: (context, mode, _) {
+                  return Wrap(
+                    spacing: 10,
+                    children: [
+                      SmallChoiceChip(
+                        label: Text(l.followSystem),
+                        selected: mode == AdaptiveThemeMode.system,
+                        onSelected: (_) {
+                          AdaptiveTheme.of(context).setSystem();
+                        },
+                      ),
+                      SmallChoiceChip(
+                        label: Text(l.light),
+                        selected: mode == AdaptiveThemeMode.light,
+                        onSelected: (_) {
+                          AdaptiveTheme.of(context).setLight();
+                        },
+                      ),
+                      SmallChoiceChip(
+                        label: Text(l.dark),
+                        selected: mode == AdaptiveThemeMode.dark,
+                        onSelected: (_) {
+                          AdaptiveTheme.of(context).setDark();
+                        },
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
           ),
           SettingTile(
             icon: const Icon(Icons.password),
             title: Text(l.resetMasterPassword),
+            onTap: () {
+              Navigator.of(context).pushNamed(ResetPasswordPage.route);
+            },
           ),
           SettingTile(
             icon: const Icon(Icons.swap_horiz),

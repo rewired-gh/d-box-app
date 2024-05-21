@@ -38,6 +38,7 @@ class _GreetingPageState extends State<GreetingPage> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            const Spacer(),
             TextFormField(
               decoration: InputDecoration(
                 icon: const Icon(Icons.key),

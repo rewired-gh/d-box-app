@@ -56,7 +56,7 @@ class VaultPage extends HookConsumerWidget {
           icon: const Icon(Icons.lock_reset),
           tooltip: l.lockVault,
           onPressed: () async {
-            s.resetVaultDao();
+            s.unloadVaultDao();
             Navigator.of(context).pushReplacementNamed(GreetingPage.route);
           },
         ),
@@ -68,6 +68,9 @@ class VaultPage extends HookConsumerWidget {
             final meta =
                 await itemMetaListNotifier.createNewItem(l.newItemName);
             isBusy.value = false;
+            if (!context.mounted) {
+              return;
+            }
             Navigator.of(context).pushNamed(
               ItemInspectPage.route,
               arguments: ItemInspectPageArgs(meta),

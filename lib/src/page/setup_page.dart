@@ -25,6 +25,7 @@ class SetupPage extends HookWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              const Spacer(),
               TextFormField(
                 decoration: InputDecoration(
                   icon: const Icon(Icons.key),
@@ -32,7 +33,7 @@ class SetupPage extends HookWidget {
                 ),
                 obscureText: true,
                 validator: (value) {
-                  if (value == null || value.length < 10) {
+                  if (value == null || value.length < 12) {
                     return l.passwordTooShort;
                   }
                   return null;
@@ -57,25 +58,28 @@ class SetupPage extends HookWidget {
               ),
               const Spacer(),
               ProgressButton(
-                  onPressed: (controller) async {
-                    if (formKey.value.currentState!.validate()) {
-                      controller.forward();
-                      final ok = await s.vaultDao
-                          .tryUnlock(masterPasswordController.text);
-                      if (!context.mounted) {
-                        return;
-                      }
-                      if (ok) {
-                        Navigator.of(context)
-                            .pushReplacementNamed(VaultPage.route);
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(l.operationFailed),
-                        ));
-                      }
+                onPressed: (controller) async {
+                  if (formKey.value.currentState!.validate()) {
+                    controller.forward();
+                    final ok = await s.vaultDao
+                        .tryUnlock(masterPasswordController.text);
+                    if (!context.mounted) {
+                      return;
                     }
-                  },
-                  child: Text(l.createVault))
+                    if (ok) {
+                      Navigator.of(context)
+                          .pushReplacementNamed(VaultPage.route);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(l.operationFailed),
+                        ),
+                      );
+                    }
+                  }
+                },
+                child: Text(l.createVault),
+              ),
             ],
           )),
     );

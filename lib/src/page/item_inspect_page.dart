@@ -56,7 +56,7 @@ class ItemInspectPage extends HookConsumerWidget {
                 if (!formKey.value.currentState!.validate()) {
                   return;
                 }
-                final (item, content) = resolvedPairSnapshot.data!;
+                final (item, _) = resolvedPairSnapshot.data!;
                 await item.setContent(
                   s.vaultDao.cachedMasterHash!,
                   utf8.encode(contentController.text),
@@ -136,7 +136,7 @@ class ItemInspectPage extends HookConsumerWidget {
                 ),
                 autoWaitBuilderRoutine<(EncryptedItem, List<int>?)?>(
                     (context, snapshot) {
-                  final (item, content) = snapshot.data!;
+                  final (_, content) = snapshot.data!;
                   if (content != null) {
                     contentController.text = utf8.decode(content);
                   }

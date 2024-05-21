@@ -41,7 +41,7 @@ class VaultDaoObjectBoxImpl extends VaultDao {
     cachedMasterHash = hash;
 
     if (kDebugMode) {
-      await debug_delay();
+      await kDebugDelay();
     }
 
     if (sign == null) {
@@ -68,7 +68,7 @@ class VaultDaoObjectBoxImpl extends VaultDao {
     final newMeta = await _metaBox.putAndGetAsync(
         EncryptedItemMeta(itemId: newItem.id, name: name ?? ""));
     if (kDebugMode) {
-      await debug_delay();
+      await kDebugDelay();
     }
     return newMeta;
   }
@@ -81,7 +81,7 @@ class VaultDaoObjectBoxImpl extends VaultDao {
       throw Exception(); // TODO
     }
     if (kDebugMode) {
-      await debug_delay();
+      await kDebugDelay();
     }
     return item;
   }
@@ -93,7 +93,7 @@ class VaultDaoObjectBoxImpl extends VaultDao {
     await _box.removeAsync(itemId);
     await _metaBox.removeAsync(metaId);
     if (kDebugMode) {
-      await debug_delay();
+      await kDebugDelay();
     }
   }
 
@@ -102,10 +102,19 @@ class VaultDaoObjectBoxImpl extends VaultDao {
     await _metaBox.putAsync(meta);
     await _box.putAsync(item);
     if (kDebugMode) {
-      await debug_delay();
+      await kDebugDelay();
     }
   }
 
   @override
   Future<bool> get isMasterPassSet async => await _signItem != null;
+
+  @override
+  Future<void> resetAll() async {
+    await _box.removeAllAsync();
+    await _metaBox.removeAllAsync();
+    if (kDebugMode) {
+      await kDebugDelay();
+    }
+  }
 }

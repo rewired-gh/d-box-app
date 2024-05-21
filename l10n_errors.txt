@@ -7,6 +7,13 @@
     "copyrightInfo",
     "versionInfo",
     "dataExportImport",
-    "autoDetect"
+    "autoDetect",
+    "followSystem",
+    "light",
+    "dark",
+    "newMasterPasswordLabel",
+    "preserveItemsLabel",
+    "reset",
+    "operationDone"
   ]
 }

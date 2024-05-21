@@ -2,7 +2,7 @@
   "@@locale": "en",
   "setupTitle": "Setup your vault",
   "masterPasswordLabel": "Master password",
-  "passwordTooShort": "This password is too short",
+  "passwordTooShort": "This password is too short (less than 12 characters)",
   "masterPasswordRepeatLabel": "Repeat password",
   "passwordNotMatch": "Passwords don't match",
   "createVault": "Create Vault",
@@ -56,5 +56,12 @@
     }
   },
   "dataExportImport": "Export and import data",
-  "autoDetect": "Auto detect"
+  "autoDetect": "Auto detect",
+  "followSystem": "System",
+  "light": "Light",
+  "dark": "Dark",
+  "newMasterPasswordLabel": "New master password",
+  "preserveItemsLabel": "Preserve current items",
+  "reset": "Reset",
+  "operationDone": "Operation was completed"
 }
