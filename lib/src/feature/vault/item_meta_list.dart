@@ -29,7 +29,7 @@ class ItemMetaList extends _$ItemMetaList {
 
   Future<void> setItem(EncryptedItemMeta meta, EncryptedItem item) async {
     final s = ServiceLocator.instance;
-    await s.vaultDao.setItem(meta, item);
+    await s.vaultDao.setFullItem(meta, item);
     ref.invalidateSelf();
     await future;
   }

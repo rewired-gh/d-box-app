@@ -63,5 +63,8 @@
   "newMasterPasswordLabel": "New master password",
   "preserveItemsLabel": "Preserve current items",
   "reset": "Reset",
-  "operationDone": "Operation was completed"
+  "operationDone": "Operation was completed",
+  "resetWarning": "Warning: Interrupting the app during the reset process may result in data loss!",
+  "exportToFile": "Export vault data to file",
+  "importFromFile": "Import vault data from file"
 }

@@ -14,6 +14,9 @@
     "newMasterPasswordLabel",
     "preserveItemsLabel",
     "reset",
-    "operationDone"
+    "operationDone",
+    "resetWarning",
+    "exportToFile",
+    "importFromFile"
   ]
 }

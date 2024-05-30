@@ -1,6 +1,3 @@
-import 'dart:math';
-
-import 'package:d_box/objectbox.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 

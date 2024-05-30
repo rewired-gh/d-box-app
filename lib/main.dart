@@ -4,6 +4,7 @@ import 'package:d_box/src/page/greeting_page.dart';
 import 'package:d_box/src/page/home_page.dart';
 import 'package:d_box/src/page/item_inspect_page.dart';
 import 'package:d_box/src/page/setting/language_page.dart';
+import 'package:d_box/src/page/setting/manage_data_page.dart';
 import 'package:d_box/src/page/setting/reset_password_page.dart';
 import 'package:d_box/src/page/setup_page.dart';
 import 'package:d_box/src/util/service_locator.dart';
@@ -57,6 +58,7 @@ class MyApp extends ConsumerWidget {
           ItemInspectPage.route: (_) => const ItemInspectPage(),
           LanguagePage.route: (_) => const LanguagePage(),
           ResetPasswordPage.route: (_) => const ResetPasswordPage(),
+          ManageDataPage.route: (_) => const ManageDataPage(),
         },
       ),
     );

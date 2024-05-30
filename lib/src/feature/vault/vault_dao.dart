@@ -15,9 +15,15 @@ abstract class VaultDao {
 
   Future<void> removeItemById(int metaId);
 
-  Future<void> setItem(EncryptedItemMeta meta, EncryptedItem item);
+  Future<void> setFullItem(EncryptedItemMeta meta, EncryptedItem item);
+
+  Future<void> setItem(EncryptedItem item);
 
   Future<bool> get isMasterPassSet;
 
+  Stream<EncryptedItem> get allItemsStream;
+
   Future<void> resetAll();
+
+  Future<void> changePassword(String password);
 }

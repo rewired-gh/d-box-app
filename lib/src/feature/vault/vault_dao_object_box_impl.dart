@@ -12,6 +12,7 @@ class VaultDaoObjectBoxImpl extends VaultDao {
   late final Query<EncryptedItemMeta> _allMetasQuery;
   late final Query<EncryptedItem> _itemQuery;
   late final Query<EncryptedItemMeta> _metaQuery;
+  late final Query<EncryptedItem> _allItemsQuery;
 
   final Box<EncryptedItem> _box;
   final Box<EncryptedItemMeta> _metaBox;
@@ -29,9 +30,16 @@ class VaultDaoObjectBoxImpl extends VaultDao {
         .build();
     _itemQuery = _box.query(EncryptedItem_.id.equals(0)).build();
     _metaQuery = _metaBox.query(EncryptedItemMeta_.id.equals(0)).build();
+    _allItemsQuery = _box.query(EncryptedItem_.isSign.equals(false)).build();
   }
 
   Future<EncryptedItem?> get _signItem => _signItemQuery.findFirstAsync();
+
+  Future<void> _setSignItem(List<int> hash) async {
+    final newSign = EncryptedItem(isSign: true);
+    await newSign.setContent(hash, VaultDao.magicSeq);
+    await _box.putAsync(newSign);
+  }
 
   @override
   Future<bool> tryUnlock(String password) async {
@@ -45,9 +53,7 @@ class VaultDaoObjectBoxImpl extends VaultDao {
     }
 
     if (sign == null) {
-      final newSign = EncryptedItem(isSign: true);
-      await newSign.setContent(hash, VaultDao.magicSeq);
-      await _box.putAsync(newSign);
+      _setSignItem(hash);
       return true;
     }
 
@@ -98,8 +104,16 @@ class VaultDaoObjectBoxImpl extends VaultDao {
   }
 
   @override
-  Future<void> setItem(EncryptedItemMeta meta, EncryptedItem item) async {
+  Future<void> setFullItem(EncryptedItemMeta meta, EncryptedItem item) async {
     await _metaBox.putAsync(meta);
+    await _box.putAsync(item);
+    if (kDebugMode) {
+      await kDebugDelay();
+    }
+  }
+
+  @override
+  Future<void> setItem(EncryptedItem item) async {
     await _box.putAsync(item);
     if (kDebugMode) {
       await kDebugDelay();
@@ -110,9 +124,36 @@ class VaultDaoObjectBoxImpl extends VaultDao {
   Future<bool> get isMasterPassSet async => await _signItem != null;
 
   @override
+  Stream<EncryptedItem> get allItemsStream => _allItemsQuery.stream();
+
+  @override
   Future<void> resetAll() async {
     await _box.removeAllAsync();
     await _metaBox.removeAllAsync();
+    if (kDebugMode) {
+      await kDebugDelay();
+    }
+  }
+
+  @override
+  Future<void> changePassword(String password) async {
+    final meta = await ServiceLocator.instance.vaultMetaService.meta;
+    final oldHash = cachedMasterHash!;
+    final newHash = await PasswordHash(password, meta.masterNonce).hash;
+    cachedMasterHash = newHash;
+
+    final signItem = await _signItemQuery.findFirstAsync();
+    if (signItem != null) {
+      await _box.removeAsync(signItem.id);
+    }
+    await _setSignItem(newHash);
+
+    await allItemsStream.forEach((item) async {
+      final content = await item.getContent(oldHash);
+      await item.setContent(newHash, content);
+      await _box.putAsync(item);
+    });
+
     if (kDebugMode) {
       await kDebugDelay();
     }

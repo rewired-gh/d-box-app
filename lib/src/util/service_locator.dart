@@ -14,12 +14,15 @@ enum PrefKeys { masterPassSign }
 
 class ServiceLocator {
   ServiceLocator._ctor();
-
   static final instance = ServiceLocator._ctor();
+
+  static const objectBoxFilename = 'data.mdb';
+  String? objectBoxDirectory;
 
   Future<void> init() async {
     final dir = await getApplicationSupportDirectory();
-    store = await openStore(directory: p.join(dir.path, 'obx_store'));
+    objectBoxDirectory = p.join(dir.path, 'obx_store');
+    store = await openStore(directory: objectBoxDirectory);
     packageInfo = await PackageInfo.fromPlatform();
   }
 

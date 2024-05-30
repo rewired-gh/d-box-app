@@ -17,99 +17,128 @@ class ResetPasswordPage extends HookWidget {
     final s = ServiceLocator.instance;
     final masterPasswordController = useTextEditingController();
     final isItemsPreserved = useState(true);
+    final isInCriticalAction = useState(false);
 
-    return HeibonLayout(
-      title: Text(l.resetMasterPassword),
-      body: Form(
-        key: formKey.value,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Spacer(),
-            TextFormField(
-              decoration: InputDecoration(
-                icon: const Icon(Icons.key),
-                labelText: l.newMasterPasswordLabel,
-              ),
-              obscureText: true,
-              validator: (value) {
-                if (value == null || value.length < 12) {
-                  return l.passwordTooShort;
-                }
-                return null;
-              },
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              controller: masterPasswordController,
-            ),
-            const SizedBox(height: 10),
-            TextFormField(
-              decoration: InputDecoration(
-                icon: const Icon(Icons.repeat),
-                labelText: l.masterPasswordRepeatLabel,
-              ),
-              obscureText: true,
-              validator: (value) {
-                if (value != masterPasswordController.text) {
-                  return l.passwordNotMatch;
-                }
-                return null;
-              },
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 20.0),
-              child: Wrap(
-                spacing: 5.0,
-                crossAxisAlignment: WrapCrossAlignment.center,
+    return PopScope(
+      canPop: !isInCriticalAction.value,
+      child: HeibonLayout(
+        title: Text(l.resetMasterPassword),
+        body: Form(
+          key: formKey.value,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Spacer(),
+              Wrap(
+                runSpacing: 10,
                 children: [
-                  Checkbox(
-                    value: isItemsPreserved.value,
-                    onChanged: (value) {
-                      isItemsPreserved.value = value == true;
-                    },
+                  Column(
+                    children: [
+                      TextFormField(
+                        decoration: InputDecoration(
+                          icon: const Icon(Icons.key),
+                          labelText: l.newMasterPasswordLabel,
+                        ),
+                        obscureText: true,
+                        validator: (value) {
+                          if (value == null || value.length < 12) {
+                            return l.passwordTooShort;
+                          }
+                          return null;
+                        },
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        controller: masterPasswordController,
+                      ),
+                      const SizedBox(height: 10),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          icon: const Icon(Icons.repeat),
+                          labelText: l.masterPasswordRepeatLabel,
+                        ),
+                        obscureText: true,
+                        validator: (value) {
+                          if (value != masterPasswordController.text) {
+                            return l.passwordNotMatch;
+                          }
+                          return null;
+                        },
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                      ),
+                    ],
+                  ),
+                  Wrap(
+                    spacing: 5.0,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Checkbox(
+                        value: isItemsPreserved.value,
+                        onChanged: (value) {
+                          isItemsPreserved.value = value != false;
+                        },
+                      ),
+                      Text(
+                        l.preserveItemsLabel,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ],
                   ),
                   Text(
-                    l.preserveItemsLabel,
-                    style: Theme.of(context).textTheme.bodyMedium,
+                    maxLines: 4,
+                    style: const TextStyle(
+                      color: Colors.redAccent,
+                      fontSize: 12,
+                    ),
+                    l.resetWarning,
                   ),
                 ],
               ),
-            ),
-            const Spacer(),
-            ProgressButton(
-              onPressed: (controller) async {
-                if (formKey.value.currentState!.validate()) {
-                  controller.forward();
-                  if (isItemsPreserved.value) {
-                    // TODO
-                  } else {
-                    await s.vaultDao.resetAll();
-                    final ok = await s.vaultDao
-                        .tryUnlock(masterPasswordController.text);
-                    if (!context.mounted) {
-                      return;
-                    }
-                    if (ok) {
+              const Spacer(),
+              ProgressButton(
+                onPressed: (controller) async {
+                  if (formKey.value.currentState!.validate()) {
+                    controller.forward();
+                    if (isItemsPreserved.value) {
+                      isInCriticalAction.value = true;
+                      await s.vaultDao
+                          .changePassword(masterPasswordController.text);
+                      isInCriticalAction.value = false;
+                      if (!context.mounted) {
+                        return;
+                      }
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(l.operationDone),
                         ),
                       );
-                      Navigator.of(context).pop();
                     } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(l.operationFailed),
-                        ),
-                      );
+                      await s.vaultDao.resetAll();
+                      final ok = await s.vaultDao
+                          .tryUnlock(masterPasswordController.text);
+                      if (!context.mounted) {
+                        return;
+                      }
+                      if (ok) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(l.operationDone),
+                          ),
+                        );
+                        Navigator.of(context).pop();
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(l.operationFailed),
+                          ),
+                        );
+                      }
                     }
+                    controller.reverse();
                   }
-                  controller.reverse();
-                }
-              },
-              child: Text(l.reset),
-            ),
-          ],
+                },
+                child: Text(l.reset),
+              ),
+            ],
+          ),
         ),
       ),
     );

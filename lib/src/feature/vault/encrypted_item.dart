@@ -38,7 +38,12 @@ class EncryptedItem {
     return _content;
   }
 
-  Future<void> setContent(List<int> passwordHash, List<int> content) async {
+  Future<void> setContent(List<int> passwordHash, List<int>? content) async {
+    if (content == null) {
+      encryptedContent = content;
+      return;
+    }
+
     final secretBox =
         await _algo.encrypt(content, secretKey: SecretKey(passwordHash));
     nonce = secretBox.nonce;

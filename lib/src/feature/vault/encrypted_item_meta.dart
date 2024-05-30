@@ -6,6 +6,7 @@ class EncryptedItemMeta {
   int id;
   int itemId;
   String name;
+  @Property(type: PropertyType.date)
   DateTime createdDate;
 
   EncryptedItemMeta({this.id = 0, required this.itemId, this.name = ""})

@@ -2,5 +2,6 @@
     "makefile.configureOnOpen": false,
     "files.autoSave": "onFocusChange",
     "editor.formatOnSave": true,
-    "editor.tabSize": 2
+    "editor.tabSize": 2,
+    "cmake.sourceDirectory": "/Users/lihaojun/Source/Websites/d-box/client/linux"
 }
