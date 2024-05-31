@@ -24,7 +24,10 @@ class ServiceLocator {
   Future<void> init() async {
     appSupportDirectory = await getApplicationSupportDirectory();
     objectBoxPath = p.join(appSupportDirectory!.path, objectBoxDirectoryName);
-    store = await openStore(directory: objectBoxPath);
+    store = await openStore(
+      directory: objectBoxPath,
+      macosApplicationGroup: 'G3DZDVUX5D.dbox',
+    );
     packageInfo = await PackageInfo.fromPlatform();
   }
 
