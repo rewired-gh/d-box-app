@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:d_box/objectbox.g.dart';
 import 'package:d_box/src/feature/settings/settings.dart';
@@ -16,13 +17,14 @@ class ServiceLocator {
   ServiceLocator._ctor();
   static final instance = ServiceLocator._ctor();
 
-  static const objectBoxFilename = 'data.mdb';
-  String? objectBoxDirectory;
+  static const objectBoxDirectoryName = 'obx_store';
+  String? objectBoxPath;
+  Directory? appSupportDirectory;
 
   Future<void> init() async {
-    final dir = await getApplicationSupportDirectory();
-    objectBoxDirectory = p.join(dir.path, 'obx_store');
-    store = await openStore(directory: objectBoxDirectory);
+    appSupportDirectory = await getApplicationSupportDirectory();
+    objectBoxPath = p.join(appSupportDirectory!.path, objectBoxDirectoryName);
+    store = await openStore(directory: objectBoxPath);
     packageInfo = await PackageInfo.fromPlatform();
   }
 

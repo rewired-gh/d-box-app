@@ -1,8 +1,11 @@
 import 'dart:io';
 
+import 'package:cryptography/helpers.dart';
 import 'package:d_box/src/page/home/settings_page.dart';
 import 'package:d_box/src/util/service_locator.dart';
+import 'package:d_box/src/widget/confirm_dialog.dart';
 import 'package:d_box/src/widget/heibon_layout.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_archive/flutter_archive.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
@@ -27,21 +30,17 @@ class ManageDataPage extends HookWidget {
         children: [
           SettingTile(
             title: Text(l.exportToFile),
-            icon: const Icon(Icons.output_rounded),
+            icon: const Icon(Icons.upload_file_outlined),
             onTap: () async {
               const zipFilename = 'vault_data.zip';
-              final sourceDir = Directory(s.objectBoxDirectory!);
-              final files = [
-                File(p.join(sourceDir.path, ServiceLocator.objectBoxFilename))
-              ];
-              final zipFile = File(p.join(sourceDir.path, zipFilename));
+              final zipFile =
+                  File(p.join(s.appSupportDirectory!.path, zipFilename));
               try {
                 if (await zipFile.exists()) {
                   await zipFile.delete();
                 }
-                await ZipFile.createFromFiles(
-                  sourceDir: sourceDir,
-                  files: files,
+                await ZipFile.createFromDirectory(
+                  sourceDir: Directory(s.objectBoxPath!),
                   zipFile: zipFile,
                 );
               } catch (e) {
@@ -55,18 +54,89 @@ class ManageDataPage extends HookWidget {
                 );
                 return;
               }
-              await Share.shareXFiles(
-                [XFile(zipFile.path)],
-                text: 'Vault data',
-              );
-              await zipFile.delete();
+              if (Platform.isMacOS) {
+                // TODO: Support macOS in a better way
+                await Share.shareXFiles([XFile(zipFile.path)]);
+              } else {
+                await FilePicker.platform.saveFile(
+                  dialogTitle: l.exportToFile,
+                  fileName: zipFilename,
+                );
+              }
             },
           ),
           SettingTile(
             title: Text(l.importFromFile),
-            icon: const Icon(Icons.input_rounded),
+            icon: const Icon(Icons.settings_backup_restore_rounded),
             onTap: () {
-              // TODO
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return ConfirmDialog(
+                    title: Text(l.confirmImport),
+                    content: Text(l.overrideWarningP),
+                    onConfirm: () async {
+                      final result = await FilePicker.platform.pickFiles(
+                        dialogTitle: l.chooseFileImport,
+                        type: FileType.custom,
+                        allowedExtensions: ['zip'],
+                      );
+                      if (result == null) {
+                        return;
+                      }
+                      File zipFile = File(result.files.single.path!);
+                      final destDir = s.appSupportDirectory!;
+                      final backupPath = p.join(
+                        destDir.path,
+                        '${ServiceLocator.objectBoxDirectoryName}.bak${randomBytesAsHexString(8)}',
+                      );
+                      final prevPath = p.join(
+                        destDir.path,
+                        ServiceLocator.objectBoxDirectoryName,
+                      );
+                      Directory? backupDirectory;
+                      try {
+                        final prevDirectory = Directory(prevPath);
+                        if (await prevDirectory.exists()) {
+                          backupDirectory = await prevDirectory
+                              .rename(p.join(destDir.path, backupPath));
+                        }
+                        await prevDirectory.create(recursive: true);
+                        await ZipFile.extractToDirectory(
+                          zipFile: zipFile,
+                          destinationDir: prevDirectory,
+                        );
+                      } catch (e) {
+                        if (backupDirectory != null) {
+                          await backupDirectory.rename(prevPath);
+                        }
+                        if (!context.mounted) {
+                          return;
+                        }
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(l.operationFailed),
+                          ),
+                        );
+                        return;
+                      } finally {
+                        if (backupDirectory != null) {
+                          await backupDirectory.delete(recursive: true);
+                        }
+                      }
+                      if (!context.mounted) {
+                        return;
+                      }
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(l.operationDone),
+                        ),
+                      );
+                      Navigator.of(context).pop();
+                    },
+                  );
+                },
+              );
             },
           ),
         ],

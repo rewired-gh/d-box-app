@@ -6,6 +6,7 @@ import 'package:d_box/src/feature/vault/item_meta_list.dart';
 import 'package:d_box/src/feature/vault/vault_dao.dart';
 import 'package:d_box/src/util/future_builder.dart';
 import 'package:d_box/src/util/service_locator.dart';
+import 'package:d_box/src/widget/confirm_dialog.dart';
 import 'package:d_box/src/widget/heibon_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
@@ -83,27 +84,16 @@ class ItemInspectPage extends HookConsumerWidget {
           onPressed: () {
             showDialog(
               context: context,
-              builder: (context) => AlertDialog(
+              builder: (context) => ConfirmDialog(
                 title: Text(l.confirmDelete),
                 content: Text(l.actionCantUndoP),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text(l.cancel),
-                  ),
-                  TextButton(
-                    onPressed: () async {
-                      await itemMetaListNotifier.removeItemById(args.meta.id);
-                      if (!context.mounted) {
-                        return;
-                      }
-                      Navigator.of(context).popUntil((route) => route.isFirst);
-                    },
-                    child: Text(l.confirm),
-                  ),
-                ],
+                onConfirm: () async {
+                  await itemMetaListNotifier.removeItemById(args.meta.id);
+                  if (!context.mounted) {
+                    return;
+                  }
+                  Navigator.of(context).popUntil((route) => route.isFirst);
+                },
               ),
             );
           },

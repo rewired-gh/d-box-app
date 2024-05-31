@@ -15,8 +15,11 @@
     "preserveItemsLabel",
     "reset",
     "operationDone",
-    "resetWarning",
+    "resetWarningP",
     "exportToFile",
-    "importFromFile"
+    "importFromFile",
+    "chooseFileImport",
+    "confirmImport",
+    "overrideWarningP"
   ]
 }

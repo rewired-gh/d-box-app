@@ -88,7 +88,7 @@ class ResetPasswordPage extends HookWidget {
                       color: Colors.redAccent,
                       fontSize: 12,
                     ),
-                    l.resetWarning,
+                    l.resetWarningP,
                   ),
                 ],
               ),
