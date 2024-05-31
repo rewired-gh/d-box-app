@@ -24,18 +24,18 @@ Because the app uses platform-specific APIs whenever possible, it runs fast on n
 ## Features
 
 - [x] Master password
-- [] Content encryption
+- [ ] Content encryption
     - [x] Text content
-    - [] (Planned) Item title
-    - [] Multimedia
+    - [ ] (Planned) Item title
+    - [ ] Multimedia
 - [x] Lock on request
-- [] Localization
+- [ ] Localization
     - [x] English
-    - [] (Partial) Simplified Chinese
+    - [ ] (Partial) Simplified Chinese
 - [x] Customizable color theme
 - [x] Reset password
 - [x] Export and import data
-- [] (Planned) Cloud sync
+- [ ] (Planned) Cloud sync
 
 ## Collaboration
 
