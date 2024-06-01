@@ -5,7 +5,7 @@ Compared to C-Box, D-Box offers an enhanced user experience and improved algorit
 
 ## Download and Install
 
-To download the latest version of the app, please visit the GitHub Releases.
+To download the latest version of the app, please visit the [GitHub Releases](https://github.com/rewired-gh/d-box-app/releases).
 Note that not all supported platforms have a pre-built app available.
 
 ## Cryptographic Algorithms
