@@ -69,5 +69,5 @@
   "importFromFile": "Import vault data from file",
   "chooseFileImport": "Choose import file",
   "confirmImport": "Confirm import action",
-  "overrideWarningP": "Current data will be overwritten after the import action. Please restart the app after the import action. Interrupting the app during the import process may result in data loss."
+  "overrideWarningP": "Current data will be overwritten and the app will exit after the import action. Interrupting the app during the import process may result in data loss."
 }

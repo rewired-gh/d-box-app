@@ -21,13 +21,17 @@ class ServiceLocator {
   String? objectBoxPath;
   Directory? appSupportDirectory;
 
-  Future<void> init() async {
+  Future<void> initStore() async {
     appSupportDirectory = await getApplicationSupportDirectory();
     objectBoxPath = p.join(appSupportDirectory!.path, objectBoxDirectoryName);
     store = await openStore(
       directory: objectBoxPath,
       macosApplicationGroup: 'G3DZDVUX5D.dbox',
     );
+  }
+
+  Future<void> init() async {
+    await initStore();
     packageInfo = await PackageInfo.fromPlatform();
   }
 
@@ -49,7 +53,7 @@ class ServiceLocator {
     _vaultDao = null;
   }
 
-  late final Store store;
+  late Store store;
 
   VaultMetaService? _vaultMetaService;
 

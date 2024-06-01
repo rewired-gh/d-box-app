@@ -5,7 +5,7 @@ import 'package:d_box/src/page/home/settings_page.dart';
 import 'package:d_box/src/util/service_locator.dart';
 import 'package:d_box/src/widget/confirm_dialog.dart';
 import 'package:d_box/src/widget/heibon_layout.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_archive/flutter_archive.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
@@ -54,14 +54,16 @@ class ManageDataPage extends HookWidget {
                 );
                 return;
               }
-              if (Platform.isMacOS) {
-                // TODO: Support macOS in a better way
-                await Share.shareXFiles([XFile(zipFile.path)]);
-              } else {
-                await FilePicker.platform.saveFile(
-                  dialogTitle: l.exportToFile,
-                  fileName: zipFilename,
+              if (Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
+                final savedLocation = await getSaveLocation(
+                  suggestedName: zipFilename,
                 );
+                if (savedLocation == null) {
+                  return;
+                }
+                await XFile(zipFile.path).saveTo(savedLocation.path);
+              } else {
+                await Share.shareXFiles([XFile(zipFile.path)]);
               }
             },
           ),
@@ -76,15 +78,18 @@ class ManageDataPage extends HookWidget {
                     title: Text(l.confirmImport),
                     content: Text(l.overrideWarningP),
                     onConfirm: () async {
-                      final result = await FilePicker.platform.pickFiles(
-                        dialogTitle: l.chooseFileImport,
-                        type: FileType.custom,
-                        allowedExtensions: ['zip'],
+                      final zipXFile = await openFile(
+                        acceptedTypeGroups: [
+                          const XTypeGroup(
+                            label: 'zip',
+                            extensions: ['zip'],
+                          ),
+                        ],
                       );
-                      if (result == null) {
+                      if (zipXFile == null) {
                         return;
                       }
-                      File zipFile = File(result.files.single.path!);
+                      final zipFile = File(zipXFile.path);
                       final destDir = s.appSupportDirectory!;
                       final backupPath = p.join(
                         destDir.path,
@@ -97,6 +102,7 @@ class ManageDataPage extends HookWidget {
                       Directory? backupDirectory;
                       try {
                         final prevDirectory = Directory(prevPath);
+                        s.store.close();
                         if (await prevDirectory.exists()) {
                           backupDirectory = await prevDirectory
                               .rename(p.join(destDir.path, backupPath));
@@ -106,6 +112,8 @@ class ManageDataPage extends HookWidget {
                           zipFile: zipFile,
                           destinationDir: prevDirectory,
                         );
+                        await s.initStore();
+                        exit(0);
                       } catch (e) {
                         if (backupDirectory != null) {
                           await backupDirectory.rename(prevPath);
@@ -120,19 +128,11 @@ class ManageDataPage extends HookWidget {
                         );
                         return;
                       } finally {
-                        if (backupDirectory != null) {
+                        if (backupDirectory != null &&
+                            await backupDirectory.exists()) {
                           await backupDirectory.delete(recursive: true);
                         }
                       }
-                      if (!context.mounted) {
-                        return;
-                      }
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(l.operationDone),
-                        ),
-                      );
-                      Navigator.of(context).pop();
                     },
                   );
                 },
