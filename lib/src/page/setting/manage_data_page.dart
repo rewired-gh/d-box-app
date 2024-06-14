@@ -18,6 +18,74 @@ class ManageDataPage extends HookWidget {
 
   const ManageDataPage({super.key});
 
+  Future<void> _importRoutine(
+    BuildContext context, {
+    required Future<void> Function(Directory) action,
+  }) async {
+    final l = AppLocalizations.of(context);
+    final s = ServiceLocator.instance;
+
+    final destDir = s.appSupportDirectory!;
+    final backupPath = p.join(
+      destDir.path,
+      '${ServiceLocator.objectBoxDirectoryName}.bak${randomBytesAsHexString(8)}',
+    );
+    final prevPath = p.join(
+      destDir.path,
+      ServiceLocator.objectBoxDirectoryName,
+    );
+    Directory? backupDirectory;
+    try {
+      final prevDirectory = Directory(prevPath);
+      s.store.close();
+      if (await prevDirectory.exists()) {
+        backupDirectory =
+            await prevDirectory.rename(p.join(destDir.path, backupPath));
+      }
+      await prevDirectory.create(recursive: true);
+      await action(prevDirectory);
+      await s.initStore();
+      exit(0);
+    } catch (e) {
+      if (backupDirectory != null) {
+        await backupDirectory.rename(prevPath);
+      }
+      if (!context.mounted) {
+        return;
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l.operationFailed),
+        ),
+      );
+      return;
+    } finally {
+      if (backupDirectory != null && await backupDirectory.exists()) {
+        await backupDirectory.delete(recursive: true);
+      }
+    }
+  }
+
+  void _warnAndImportRoutine(
+    BuildContext context, {
+    required Future<void> Function(Directory) action,
+  }) {
+    final l = AppLocalizations.of(context);
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return ConfirmDialog(
+          title: Text(l.confirmImport),
+          content: Text(l.overrideWarningP),
+          onConfirm: () async {
+            await _importRoutine(context, action: action);
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(context) {
     final l = AppLocalizations.of(context);
@@ -71,69 +139,24 @@ class ManageDataPage extends HookWidget {
             title: Text(l.importFromFile),
             icon: const Icon(Icons.settings_backup_restore_rounded),
             onTap: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return ConfirmDialog(
-                    title: Text(l.confirmImport),
-                    content: Text(l.overrideWarningP),
-                    onConfirm: () async {
-                      final zipXFile = await openFile(
-                        acceptedTypeGroups: [
-                          const XTypeGroup(
-                            label: 'zip',
-                            extensions: ['zip'],
-                          ),
-                        ],
-                      );
-                      if (zipXFile == null) {
-                        return;
-                      }
-                      final zipFile = File(zipXFile.path);
-                      final destDir = s.appSupportDirectory!;
-                      final backupPath = p.join(
-                        destDir.path,
-                        '${ServiceLocator.objectBoxDirectoryName}.bak${randomBytesAsHexString(8)}',
-                      );
-                      final prevPath = p.join(
-                        destDir.path,
-                        ServiceLocator.objectBoxDirectoryName,
-                      );
-                      Directory? backupDirectory;
-                      try {
-                        final prevDirectory = Directory(prevPath);
-                        s.store.close();
-                        if (await prevDirectory.exists()) {
-                          backupDirectory = await prevDirectory
-                              .rename(p.join(destDir.path, backupPath));
-                        }
-                        await prevDirectory.create(recursive: true);
-                        await ZipFile.extractToDirectory(
-                          zipFile: zipFile,
-                          destinationDir: prevDirectory,
-                        );
-                        await s.initStore();
-                        exit(0);
-                      } catch (e) {
-                        if (backupDirectory != null) {
-                          await backupDirectory.rename(prevPath);
-                        }
-                        if (!context.mounted) {
-                          return;
-                        }
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(l.operationFailed),
-                          ),
-                        );
-                        return;
-                      } finally {
-                        if (backupDirectory != null &&
-                            await backupDirectory.exists()) {
-                          await backupDirectory.delete(recursive: true);
-                        }
-                      }
-                    },
+              _warnAndImportRoutine(
+                context,
+                action: (targetDirectory) async {
+                  final zipXFile = await openFile(
+                    acceptedTypeGroups: [
+                      const XTypeGroup(
+                        label: 'zip',
+                        extensions: ['zip'],
+                      ),
+                    ],
+                  );
+                  if (zipXFile == null) {
+                    throw Exception();
+                  }
+                  final zipFile = File(zipXFile.path);
+                  await ZipFile.extractToDirectory(
+                    zipFile: zipFile,
+                    destinationDir: targetDirectory,
                   );
                 },
               );
