@@ -1,25 +1,5 @@
 {
-  "zh": [
-    "languageRegion",
-    "colorTheme",
-    "resetMasterPassword",
-    "about",
-    "copyrightInfo",
-    "versionInfo",
-    "dataExportImport",
-    "autoDetect",
-    "followSystem",
-    "light",
-    "dark",
-    "newMasterPasswordLabel",
-    "preserveItemsLabel",
-    "reset",
-    "operationDone",
-    "resetWarningP",
-    "exportToFile",
-    "importFromFile",
-    "chooseFileImport",
-    "confirmImport",
-    "overrideWarningP"
+  "ja": [
+    "copyrightInfo"
   ]
 }

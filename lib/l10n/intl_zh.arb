@@ -34,5 +34,40 @@
   "unsaveReminder": "当前内容未保存",
   "contentSaved": "内容已保存",
   "home": "首页",
-  "settings": "设置"
+  "settings": "设置",
+  "languageRegion": "语言和地区",
+  "colorTheme": "外观主题",
+  "resetMasterPassword": "重置主密码",
+  "about": "关于D-Box",
+  "copyrightInfo": "© {rightYear} Haojun Li。保留所有权利。\n网站：https://rewired.moe",
+  "@copyrightInfo": {
+    "placeholders": {
+      "rightYear": {
+        "type": "String"
+      }
+    }
+  },
+  "versionInfo": "版本 {version}",
+  "@versionInfo": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "dataExportImport": "导出和导入数据",
+  "autoDetect": "自动检测",
+  "followSystem": "系统",
+  "light": "浅色",
+  "dark": "深色",
+  "newMasterPasswordLabel": "新主密码",
+  "preserveItemsLabel": "保留当前项目",
+  "reset": "重置",
+  "operationDone": "操作已完成",
+  "resetWarningP": "警告：在重置过程中中断应用程序可能导致数据丢失！",
+  "exportToFile": "导出保险箱数据到文件",
+  "importFromFile": "从文件导入保险箱数据",
+  "chooseFileImport": "选择导入文件",
+  "confirmImport": "确认导入操作",
+  "overrideWarningP": "当前数据将被覆盖，应用程序将在导入操作后退出。在导入过程中中断应用程序可能导致数据丢失。"
 }

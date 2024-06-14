@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
+import 'package:flutter_localized_locales/native_locale_names.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class LanguagePage extends HookConsumerWidget {
@@ -29,18 +30,22 @@ class LanguagePage extends HookConsumerWidget {
       title: Text(l.languageRegion),
       body: ListView.builder(
         itemCount: locales.length,
-        itemBuilder: (context, i) => RadioListTile(
-          value: locales[i],
-          groupValue: selectedLocale.value,
-          onChanged: (value) {
-            selectedLocale.value = value;
-            appLocaleNotifier.setLocale(value);
-          },
-          title: Text(locales[i] == null
+        itemBuilder: (context, i) {
+          final locale = locales[i];
+          final languageTag = locale?.toLanguageTag();
+          final localeName = languageTag == null
               ? l.autoDetect
-              : LocaleNames.of(context)!.nameOf(locales[i]!.toLanguageTag()) ??
-                  l.autoDetect),
-        ),
+              : '${all_native_names[languageTag]} (${LocaleNames.of(context)!.nameOf(languageTag) ?? ""})';
+          return RadioListTile(
+            value: locale,
+            groupValue: selectedLocale.value,
+            onChanged: (value) {
+              selectedLocale.value = value;
+              appLocaleNotifier.setLocale(value);
+            },
+            title: Text(localeName),
+          );
+        },
       ),
     );
   }

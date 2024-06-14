@@ -1,0 +1,65 @@
+{
+  "@@locale": "ja",
+  "setupTitle": "ボールトのセットアップ",
+  "masterPasswordLabel": "パスワード",
+  "passwordTooShort": "このパスワードは短すぎます（12文字未満）",
+  "masterPasswordRepeatLabel": "パスワードを再入力",
+  "passwordNotMatch": "パスワードが一致しません",
+  "createVault": "ボールトを作成",
+  "vaultTitle": "D-Box",
+  "operationFailed": "操作に失敗しました",
+  "unlockTitle": "ボールトを解除",
+  "failedWrongPassword": "解除に失敗しました：パスワードが間違っています",
+  "unlock": "解除",
+  "createdDate": "作成日：{dateTime}",
+  "@createdDate": {
+    "placeholders": {
+      "dateTime": {
+        "type": "DateTime",
+        "format": "yMMMMd"
+      }
+    }
+  },
+  "addItem": "新しいアイテムを追加",
+  "newItemName": "新しいアイテム",
+  "itemNameLabel": "アイテム名",
+  "fieldCantEmpty": "このフィールドは空にできません",
+  "decryptedContentLabel": "復号化されたコンテンツ",
+  "confirmDelete": "削除の確認",
+  "actionCantUndoP": "この操作は元に戻せません。",
+  "confirm": "確認",
+  "cancel": "キャンセル",
+  "lockVault": "ボールトをロック",
+  "save": "保存",
+  "unsaveReminder": "現在の内容は保存されていません",
+  "contentSaved": "コンテンツが保存されました",
+  "home": "ホーム",
+  "settings": "設定",
+  "languageRegion": "言語と地域",
+  "colorTheme": "カラーテーマ",
+  "resetMasterPassword": "パスワードをリセット",
+  "about": "D-Boxについて",
+  "versionInfo": "バージョン {version}",
+  "@versionInfo": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "dataExportImport": "エクスポートとインポート",
+  "autoDetect": "自動検出",
+  "followSystem": "システム",
+  "light": "ライト",
+  "dark": "ダーク",
+  "newMasterPasswordLabel": "新しいパスワード",
+  "preserveItemsLabel": "現在のアイテムを保持",
+  "reset": "リセット",
+  "operationDone": "操作が完了しました",
+  "resetWarningP": "警告：リセットプロセス中にアプリを中断すると、データが失われる可能性があります！",
+  "exportToFile": "ファイルにエクスポート",
+  "importFromFile": "ファイルからインポート",
+  "chooseFileImport": "インポートファイルを選択",
+  "confirmImport": "インポートアクションの確認",
+  "overrideWarningP": "現在のデータは上書きされ、インポートアクション後にアプリが終了します。インポートプロセス中にアプリを中断すると、データが失われる可能性があります。"
+}

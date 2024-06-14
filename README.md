@@ -29,9 +29,10 @@ By using platform-specific APIs whenever possible, D-Box achieves optimal perfor
   - [ ] (Planned) Item title
   - [ ] Multimedia
 - [x] Lock on request
-- [ ] Localization
-  - [x] English
-  - [ ] (Partial) Simplified Chinese
+- [x] Localization
+  - [x] English (Tier 1)
+  - [x] Simplified Chinese (Tier 2)
+  - [x] Japanese (Tier 3)
 - [x] Customizable color theme
 - [x] Reset password
 - [x] Export and import data
