@@ -36,7 +36,7 @@ class ResetPasswordPage extends HookWidget {
                     children: [
                       TextFormField(
                         decoration: InputDecoration(
-                          icon: const Icon(Icons.key),
+                          icon: const Icon(Icons.key_outlined),
                           labelText: l.newMasterPasswordLabel,
                         ),
                         obscureText: true,
@@ -52,7 +52,7 @@ class ResetPasswordPage extends HookWidget {
                       const SizedBox(height: 10),
                       TextFormField(
                         decoration: InputDecoration(
-                          icon: const Icon(Icons.repeat),
+                          icon: const Icon(Icons.repeat_outlined),
                           labelText: l.masterPasswordRepeatLabel,
                         ),
                         obscureText: true,

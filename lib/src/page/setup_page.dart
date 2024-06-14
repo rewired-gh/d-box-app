@@ -28,7 +28,7 @@ class SetupPage extends HookWidget {
               const Spacer(),
               TextFormField(
                 decoration: InputDecoration(
-                  icon: const Icon(Icons.key),
+                  icon: const Icon(Icons.key_outlined),
                   labelText: l.masterPasswordLabel,
                 ),
                 obscureText: true,
@@ -44,7 +44,7 @@ class SetupPage extends HookWidget {
               const SizedBox(height: 10),
               TextFormField(
                 decoration: InputDecoration(
-                  icon: const Icon(Icons.repeat),
+                  icon: const Icon(Icons.repeat_outlined),
                   labelText: l.masterPasswordRepeatLabel,
                 ),
                 obscureText: true,

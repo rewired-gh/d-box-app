@@ -41,7 +41,7 @@ class _GreetingPageState extends State<GreetingPage> {
             const Spacer(),
             TextFormField(
               decoration: InputDecoration(
-                icon: const Icon(Icons.key),
+                icon: const Icon(Icons.key_outlined),
                 labelText: l.masterPasswordLabel,
               ),
               obscureText: true,

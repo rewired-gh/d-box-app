@@ -53,7 +53,7 @@ class VaultPage extends HookConsumerWidget {
       ),
       actions: [
         IconButton(
-          icon: const Icon(Icons.lock_reset),
+          icon: const Icon(Icons.lock_reset_outlined),
           tooltip: l.lockVault,
           onPressed: () async {
             s.unloadVaultDao();
@@ -61,7 +61,7 @@ class VaultPage extends HookConsumerWidget {
           },
         ),
         IconButton(
-          icon: const Icon(Icons.add),
+          icon: const Icon(Icons.add_outlined),
           tooltip: l.addItem,
           onPressed: () async {
             isBusy.value = true;

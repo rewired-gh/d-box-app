@@ -23,7 +23,7 @@ class SettingsPage extends HookWidget {
       body: ListView(
         children: [
           SettingTile(
-            icon: const Icon(Icons.language),
+            icon: const Icon(Icons.language_outlined),
             title: Text(l.languageRegion),
             onTap: () {
               Navigator.of(context).pushNamed(LanguagePage.route);
@@ -68,14 +68,14 @@ class SettingsPage extends HookWidget {
             ),
           ),
           SettingTile(
-            icon: const Icon(Icons.password),
+            icon: const Icon(Icons.password_outlined),
             title: Text(l.resetMasterPassword),
             onTap: () {
               Navigator.of(context).pushNamed(ResetPasswordPage.route);
             },
           ),
           SettingTile(
-            icon: const Icon(Icons.swap_horiz),
+            icon: const Icon(Icons.swap_horiz_outlined),
             title: Text(l.dataExportImport),
             onTap: () {
               Navigator.of(context).pushNamed(ManageDataPage.route);

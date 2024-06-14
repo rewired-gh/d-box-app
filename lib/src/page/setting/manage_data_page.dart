@@ -137,7 +137,7 @@ class ManageDataPage extends HookWidget {
           ),
           SettingTile(
             title: Text(l.importFromFile),
-            icon: const Icon(Icons.settings_backup_restore_rounded),
+            icon: const Icon(Icons.settings_backup_restore_outlined),
             onTap: () {
               _warnAndImportRoutine(
                 context,
